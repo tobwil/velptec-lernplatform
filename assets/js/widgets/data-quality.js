@@ -12,12 +12,12 @@ const RECORDS = [
   {
     data: { nr: 'K-1001', name: 'Anna Becker', email: 'anna.becker@beispiel.de', plz: '50667', ort: 'Köln', geburt: '14.03.1988', typ: 'Privatkunde', update: '03/2026' },
     ok: true, dim: 'Alle Dimensionen erfüllt',
-    why: 'Vollständig, plausibel, aktuell und für die Analyse relevant – dieser Datensatz kann so verwendet werden.',
+    why: 'Korrekt, vollständig, konsistent, aktuell, gültig und eindeutig – dieser Datensatz kann so verwendet werden.',
   },
   {
     data: { nr: 'K-1002', name: 'Jonas Wilde', email: 'jonas.wilde@beispiel,de', plz: '04109', ort: 'Leipzig', geburt: '02.11.1979', typ: 'Privatkunde', update: '01/2026' },
-    ok: false, dim: 'Genauigkeit', bad: 'email',
-    why: 'Tippfehler in der E-Mail: Komma statt Punkt („beispiel,de“). Formal ungültige Werte gehören zur Genauigkeit (Korrektheit). Abhilfe: Formatvalidierung schon bei der Eingabe.',
+    ok: false, dim: 'Gültigkeit', bad: 'email',
+    why: 'Tippfehler in der E-Mail: Komma statt Punkt („beispiel,de“). Der Wert verletzt die Formatregel – ein Problem der Gültigkeit. Abhilfe: Formatvalidierung schon bei der Eingabe.',
   },
   {
     data: { nr: 'K-1003', name: 'Mehmet Kaya', email: 'm.kaya@beispiel.de', plz: '', ort: 'Hamburg', geburt: '23.06.1992', typ: 'Privatkunde', update: '05/2026' },
@@ -26,13 +26,13 @@ const RECORDS = [
   },
   {
     data: { nr: 'K-1187', name: 'A. Becker', email: 'anna.becker@beispiel.de', plz: '50667', ort: 'Köln', geburt: '14.03.1988', typ: 'Privatkunde', update: '07/2025' },
-    ok: false, dim: 'Konsistenz (Eindeutigkeit)', bad: 'nr',
+    ok: false, dim: 'Eindeutigkeit', bad: 'nr',
     why: 'Duplikat: gleiche Person wie K-1001 (gleiche E-Mail, PLZ, Geburtsdatum), nur abgekürzt und unter neuer Kundennummer. Duplikate verzerren Zählungen und Modelle. Abhilfe: Dublettenprüfung (Fuzzy-Matching) und Zusammenführen.',
   },
   {
     data: { nr: 'K-1004', name: 'Clara Neumann', email: 'clara.neumann@beispiel.de', plz: '01067', ort: 'Dresden', geburt: '12.07.2091', typ: 'Privatkunde', update: '02/2026' },
-    ok: false, dim: 'Genauigkeit (Plausibilität)', bad: 'geburt',
-    why: 'Unplausibles Datum: ein Geburtsdatum in der Zukunft. Vermutlich ein Tippfehler (1991?). Abhilfe: Plausibilitätsregeln (z. B. Alter 16–110 Jahre).',
+    ok: false, dim: 'Gültigkeit (Wertebereich)', bad: 'geburt',
+    why: 'Unplausibles Datum: ein Geburtsdatum in der Zukunft – der Wert liegt außerhalb des zulässigen Bereichs. Vermutlich ein Tippfehler (1991?). Abhilfe: Gültigkeitsregeln (z. B. Alter 16–110 Jahre).',
   },
   {
     data: { nr: 'K-1005', name: 'Juergen Mueller', email: 'j.mueller@beispiel.de', plz: '70173', ort: 'Stuttgart', geburt: '30.09.1965', typ: 'Privatkunde', update: '04/2026' },
@@ -45,9 +45,9 @@ const RECORDS = [
     why: 'Seit über zehn Jahren nicht aktualisiert, die Post kam zurück – die Adresse ist veraltet. Abhilfe: Aktualisierungszyklen, Adressabgleich, Datensätze mit Ablaufdatum versehen.',
   },
   {
-    data: { nr: 'L-2207', name: 'Rohrwerk Nord GmbH', email: 'einkauf@rohrwerk-nord.example', plz: '24103', ort: 'Kiel', geburt: '—', typ: 'Lieferant', update: '06/2026' },
-    ok: false, dim: 'Relevanz', bad: 'typ',
-    why: 'Der Datensatz ist korrekt – aber ein Lieferant, kein Kunde. Für eine Kundenabwanderungs-Analyse ist er nicht relevant und würde das Modell verzerren. Abhilfe: Datenauswahl am Analyseziel ausrichten (Filter nach Typ).',
+    data: { nr: 'K-9999', name: 'Max Mustermann', email: 'test@test.de', plz: '12345', ort: 'Teststadt', geburt: '01.01.1900', typ: 'Privatkunde (Testanlage)', update: '06/2026' },
+    ok: false, dim: 'Korrektheit', bad: 'name',
+    why: 'Formal sieht alles gültig aus – aber dieser Datensatz bildet keine reale Person ab: ein Testeintrag aus der Systemeinführung. Daten, die die Realität nicht zutreffend abbilden, sind ein Korrektheitsproblem; im Training lernt das Modell falsche Muster. Abhilfe: Testdaten kennzeichnen und vor dem Training herausfiltern.',
   },
   {
     data: { nr: 'K-1006', name: 'Tobias Krämer', email: 't.kraemer@beispiel.de', plz: '80331', ort: 'Berlin', geburt: '17.05.1983', typ: 'Privatkunde', update: '06/2026' },
@@ -57,7 +57,7 @@ const RECORDS = [
   {
     data: { nr: 'K-1007', name: 'Sophie Wagner', email: 'sophie.wagner@beispiel.de', plz: '60311', ort: 'Frankfurt am Main', geburt: '21.12.1996', typ: 'Privatkunde', update: '08/2026' },
     ok: true, dim: 'Alle Dimensionen erfüllt',
-    why: 'Sauberer Datensatz: vollständig, plausibel, konsistent, aktuell und relevant.',
+    why: 'Sauberer Datensatz: korrekt, vollständig, konsistent, aktuell, gültig und eindeutig.',
   },
 ];
 

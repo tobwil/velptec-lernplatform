@@ -103,6 +103,18 @@ await shot(p, '06-pixelfilm');
 await go(p, '#/rangliste', 600);
 await shot(p, '07-rangliste');
 
+await go(p, '#/unterlagen', 600);
+await p.locator('section.section').first().scrollIntoViewIfNeeded();
+await p.evaluate(() => window.scrollTo(0, 260));
+await shot(p, '10-skript-uebersicht');
+
+const k1 = await mod('k1');
+const readiness = k1.lessons.find((l) => l.skript?.chapter === '1.5');
+await go(p, `#/modul/k1/lektion/${readiness.id}`, 800);
+await p.locator('.block-skript').first().scrollIntoViewIfNeeded();
+await p.evaluate(() => window.scrollBy(0, -220));
+await shot(p, '14-lektion-skriptbezug');
+
 await go(p, '#/eigene', 400);
 const sample = '# Leitfaden: KI im Kundenservice\n\nDer Leitfaden beschreibt, wie das Serviceteam KI-Werkzeuge für Anfragen einsetzt. Eingehende E-Mails werden von einem Klassifikationsmodell nach Thema und Dringlichkeit sortiert. Dringende Anfragen landen sofort beim Bereitschaftsteam.\n\n## Qualitätssicherung\n\nJede KI-Antwort wird vor dem Versand von einer Servicekraft geprüft. Die Qualitätssicherung misst wöchentlich die Fehlerquote und die Kundenzufriedenheit. Abweichungen werden im Qualitätszirkel besprochen.\n\n## Datenschutz\n\nPersonenbezogene Daten werden vor der Verarbeitung pseudonymisiert. Der Datenschutz wird durch einen Auftragsverarbeitungsvertrag mit dem Anbieter abgesichert. Die Datenschutzbeauftragte prüft neue Werkzeuge vor der Einführung.';
 await p.locator('.dropzone + input[type=file]').setInputFiles({ name: 'leitfaden-ki-kundenservice.md', mimeType: 'text/markdown', buffer: Buffer.from(sample) });

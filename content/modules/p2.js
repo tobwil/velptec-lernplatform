@@ -463,14 +463,6 @@ MCP ist ein **offener Standard**, mit dem KI-Anwendungen an externe Systeme ange
 In n8n gibt es beides: den **MCP Client** (dein Agent nutzt Tools fremder MCP-Server) und den **MCP Server Trigger** (deine n8n-Workflows werden als Tools für andere KI-Anwendungen bereitgestellt).`
         },
         {
-          type: 'youtube',
-          id: 'F8NKVhkZZWI',
-          title: 'What are AI Agents?',
-          channel: 'IBM Technology',
-          lang: 'en',
-          minutes: 12
-        },
-        {
           type: 'callout',
           variant: 'warn',
           title: 'Sicherheitsrisiken agentischer Systeme',

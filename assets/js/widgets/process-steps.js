@@ -1,63 +1,39 @@
-// Widget: Vorgehensmodell in 7 Phasen als animierte Pipeline (Skript Kap. 4.1).
+// Widget: KI-Projektlebenszyklus in 4 Phasen nach Skript Kap. 4.1 als animierte Pipeline mit Rückkopplung.
 import { h, pixelIcon } from '../ui.js';
 import { safeCtx, widgetHead, setupRoot, timers, rovingKeys, prefersReducedMotion, uid, fill } from './_shared.js';
 
 export const PHASES = [
   {
-    title: 'Planung & Zielsetzung', short: 'Planung',
-    goal: 'Das Geschäftsproblem und den messbaren Nutzen klären – bevor über Technik gesprochen wird.',
-    activities: ['Use Case schärfen und priorisieren (Nutzen × Machbarkeit)', 'SMART-Ziele und KPIs mit Ausgangswert (Baseline) festlegen', 'Business Case und Budget', 'Stakeholder-Analyse, Sponsor gewinnen', 'Erste Daten- und Risiko-Einschätzung inkl. Einstufung nach EU AI Act und DSGVO'],
-    roles: ['Projektleitung', 'Domain-Expert (Fachbereich)', 'Management-Sponsor', 'Compliance / Datenschutz'],
-    pitfalls: ['„Technologie sucht Problem“ statt Problem sucht Lösung', 'Keine messbaren Ziele – Erfolg später nicht belegbar', 'Datenschutz und Betriebsrat erst kurz vor dem Go-live einbinden'],
-    artifact: 'Projektsteckbrief / Business Case mit KPI-Baseline',
+    title: 'Ideenfindung', short: 'Idee',
+    goal: 'Das Geschäftsproblem eingrenzen und prüfen, ob KI es mit den vorhandenen Daten wirklich lösen kann (Skript 4.1, strukturierte Planung).',
+    activities: ['Geschäftsproblem mit klarem Umfang und Erfolgskriterien definieren', 'Datenverfügbarkeit und -qualität prüfen', 'Technische Machbarkeit bewerten: Ist KI hier überhaupt geeignet?', 'ROI grob schätzen (Kosten und Nutzen)', 'Stakeholder abstimmen, Sponsor und Ressourcen sichern; EU-AI-Act- und DSGVO-Ersteinschätzung'],
+    roles: ['Projektleitung / Product Owner', 'Fachbereich (Domain-Expert)', 'Management-Sponsor', 'Datenschutz / Compliance'],
+    pitfalls: ['„Technologie sucht Problem“ statt Problem sucht Lösung', 'Keine messbaren Erfolgskriterien – Erfolg später nicht belegbar', 'Datenlage nicht geprüft – das Projekt scheitert erst in der Entwicklung'],
+    artifact: 'Projektsteckbrief / Business Case mit Erfolgskriterien und KPI-Baseline',
   },
   {
-    title: 'Datensammlung & \u2011vorbereitung', short: 'Daten',
-    goal: 'Geeignete, rechtlich nutzbare Daten in ausreichender Qualität bereitstellen.',
-    activities: ['Datenquellen inventarisieren, Zugriffe und Ownership klären', 'Bereinigen: Dubletten, Lücken, Ausreißer, Formate', 'Labeln (bei überwachtem Lernen), Train/Test-Split', 'Anonymisieren bzw. pseudonymisieren', 'Datenqualität messen (Vollständigkeit, Genauigkeit, Konsistenz, Aktualität, Relevanz)'],
-    roles: ['Data Engineer', 'Data Scientist', 'Domain-Expert', 'Datenschutzbeauftragte/r'],
-    pitfalls: ['Aufwand unterschätzt – oft der größte Arbeitsblock im Projekt', 'Verzerrungen (Bias) aus historischen Daten übernommen', 'Fehlende Rechtsgrundlage für die Nutzung personenbezogener Daten'],
-    artifact: 'Datenkatalog / Datenblatt, bereinigter Datensatz, Datenqualitätsbericht',
+    title: 'Entwicklung', short: 'Entwicklung',
+    goal: 'In kurzen, agilen Lernzyklen herausfinden, welcher Ansatz das Problem zuverlässig löst.',
+    activities: ['Daten aufbereiten (Bereinigung, Labeling, Train/Test-Split)', 'Hypothesen testen, schnelle Prototypen und Modellexperimente (z. B. 2-Wochen-Sprints)', 'Make-or-buy: Standard-API, RAG, Fine-Tuning oder eigenes Modell', 'Gegen eine einfache Baseline evaluieren (Precision, Recall, F1), Fairness prüfen', 'Regelmäßige Demos mit dem Fachbereich'],
+    roles: ['Data Scientist', 'ML / Data Engineer', 'Fachbereich', 'Product Owner'],
+    pitfalls: ['Unscharfe „Definition of Done“ bei Experimenten', '„Gescheiterte“ Experimente werden als Versagen statt als Lernchance gesehen', 'Overfitting: glänzt im Labor, versagt im Alltag'],
+    artifact: 'Evaluationsbericht, versioniertes Modell / Prompt-Set, Pilotentscheidung',
   },
   {
-    title: 'Modellauswahl & Training', short: 'Modell',
-    goal: 'Einen Lösungsansatz finden, der die Ziel-KPIs zuverlässig erreicht.',
-    activities: ['Make-or-buy: Standard-API, RAG, Fine-Tuning oder eigenes Modell', 'Einfache Baseline als Vergleich definieren', 'Trainieren bzw. Prompts/Retrieval entwickeln', 'Evaluieren mit Testdaten (z. B. Precision, Recall, F1)', 'Erklärbarkeit und Fairness prüfen'],
-    roles: ['Data Scientist', 'ML Engineer', 'Domain-Expert'],
-    pitfalls: ['Overfitting: glänzt im Labor, versagt im Alltag', 'Nur Accuracy betrachten (irreführend bei seltenen Fällen)', 'Kein Vergleich mit einer einfachen Regel-Lösung'],
-    artifact: 'Evaluationsbericht und versioniertes Modell (Model Card)',
+    title: 'Bereitstellung', short: 'Bereitstellung',
+    goal: 'Das experimentelle Modell produktionsreif machen und in die echten Prozesse und Systeme integrieren – wieder stärker strukturiert.',
+    activities: ['Integration in ERP, CRM, Ticketsystem (APIs), Soll-Prozess inkl. Human-in-the-loop', 'Sicherheit, Rechte (IAM), Logging; Lasttests', 'Pilot mit Vorher-nachher-Messung, Go/No-Go nach vorab festgelegten Kriterien', 'Schulung, Kommunikation und Support für den Roll-out'],
+    roles: ['IT-Betrieb / MLOps', 'IT-Sicherheit', 'Change-Verantwortliche', 'Pilotnutzer'],
+    pitfalls: ['Insellösung ohne Anbindung an bestehende Systeme', '„Pilotitis“: Piloten ohne Erfolgskriterien, die nie enden', 'Akzeptanz unterschätzt – Tool wird nicht genutzt'],
+    artifact: 'Integrations- und Betriebskonzept, Pilotbericht, Roll-out-Plan',
   },
   {
-    title: 'Integration in Prozesse', short: 'Integration',
-    goal: 'Das Modell dort nutzbar machen, wo die Arbeit passiert.',
-    activities: ['Schnittstellen zu ERP, CRM, Ticketsystem (API)', 'Soll-Prozess inkl. Human-in-the-loop entwerfen', 'Rechte & Zugriffe (IAM), Logging, Sicherheit', 'Benutzeroberfläche und Fehlerfälle gestalten'],
-    roles: ['IT-Ops / Entwicklung', 'Prozessverantwortliche', 'Fachbereich', 'IT-Sicherheit'],
-    pitfalls: ['Insellösung ohne Anbindung an bestehende Systeme', 'Medienbrüche: Ergebnisse werden manuell abgetippt', 'Sicherheitsfragen (z. B. Prompt Injection, Datenabfluss) ignoriert'],
-    artifact: 'Integrationskonzept, Soll-Prozess, Schnittstellen-Dokumentation',
-  },
-  {
-    title: 'Pilot- / Testphase', short: 'Pilot',
-    goal: 'Den Nutzen unter realen Bedingungen und in begrenztem Rahmen nachweisen.',
-    activities: ['Pilotgruppe auswählen und schulen', 'Vorher-nachher-Messung oder A/B-Test', 'Nutzer-Feedback systematisch sammeln', 'Go/No-Go anhand vorab festgelegter Kriterien'],
-    roles: ['Projektleitung', 'Pilotnutzer', 'Data Scientist', 'Change-Verantwortliche'],
-    pitfalls: ['„Pilotitis“: Piloten ohne Erfolgskriterien, die nie enden', 'Zu kleine oder nicht repräsentative Testgruppe', 'Feedback wird gesammelt, aber nicht umgesetzt'],
-    artifact: 'Pilotbericht mit KPI-Review und Go/No-Go-Entscheidung',
-  },
-  {
-    title: 'Roll-out & Skalierung', short: 'Roll-out',
-    goal: 'Die Lösung stabil und akzeptiert in der Breite einführen.',
-    activities: ['Schulungen und Kommunikation (Change-Management)', 'Betriebs- und Supportkonzept', 'MLOps: CI/CD, Modell-Versionierung, Rollback', 'Lasttests, Kosten bei Skalierung prüfen (Lizenzen, Tokens)'],
-    roles: ['IT-Ops / MLOps', 'Change-Management / HR', 'Führungskräfte', 'Support'],
-    pitfalls: ['Akzeptanz unterschätzt – Tool wird nicht genutzt', 'Kein Support- und Eskalationsweg', 'Kosten steigen mit der Nutzung unerwartet stark'],
-    artifact: 'Roll-out-Plan, Schulungsunterlagen, Betriebshandbuch',
-  },
-  {
-    title: 'Monitoring & Optimierung', short: 'Monitoring',
-    goal: 'Qualität und Nutzen dauerhaft sichern und verbessern.',
-    activities: ['KPI-Dashboards: technisch, Prozess, Business', 'Daten- und Modell-Drift erkennen, Retraining', 'Nutzerfeedback und Incidents auswerten', 'Regelmäßige Reviews, Erkenntnisse fließen in die nächste Planungsrunde'],
-    roles: ['MLOps / IT-Ops', 'Data Scientist', 'Product Owner', 'Compliance'],
+    title: 'Betrieb', short: 'Betrieb',
+    goal: 'Qualität und Nutzen dauerhaft sichern und das System kontinuierlich verbessern.',
+    activities: ['Monitoring auf drei Ebenen: Technik, Prozess, Business', 'Daten- und Konzeptdrift erkennen, Nachtraining planen', 'Feedback und Incidents auswerten, A/B-Tests', 'Erkenntnisse fließen zurück in die nächste Ideenfindung (Kreislauf)'],
+    roles: ['MLOps / IT-Betrieb', 'Data Scientist', 'Product Owner', 'Compliance'],
     pitfalls: ['„Fire and forget“: niemand fühlt sich nach dem Go-live verantwortlich', 'Drift bleibt unbemerkt, Qualität sinkt schleichend', 'Kein Budget für den Betrieb eingeplant'],
-    artifact: 'Monitoring-Dashboard und Optimierungs-Backlog (→ Input für die nächste Planung)',
+    artifact: 'Monitoring-Dashboard und Verbesserungs-Backlog (→ Input für die nächste Runde)',
   },
 ];
 
@@ -81,7 +57,7 @@ export default function mount(el, props = {}, ctx) {
   const progress = h('span.small.muted');
 
   fill(el, 
-    widgetHead('Vorgehensmodell: 7 Phasen eines KI-Projekts', 'Klicke auf eine Phase (oder nutze die Pfeiltasten), um Ziel, Aktivitäten, Rollen, Fallstricke und Ergebnis zu sehen. „Durchlauf“ schickt das Datenpaket einmal durch die Pipeline – inklusive Rückkopplung.', 'flow'),
+    widgetHead('KI-Projektlebenszyklus: 4 Phasen (Skript 4.1)', 'Klicke auf eine Phase (oder nutze die Pfeiltasten), um Ziel, Aktivitäten, Rollen, Fallstricke und Ergebnis zu sehen. „Durchlauf“ schickt das Datenpaket einmal durch die Pipeline – inklusive Rückkopplung.', 'flow'),
     h('div.w-ps-wrap', track, feedback),
     h('div.row.w-ps-controls',
       h('button.btn.btn-sm', { type: 'button', 'aria-label': 'Vorherige Phase', onclick: () => { stop(); select((active + PHASES.length - 1) % PHASES.length); } }, '←'),
@@ -125,9 +101,9 @@ export default function mount(el, props = {}, ctx) {
       h('p.w-ps-artifact', h('span.chip.chip-ok', 'Ergebnis-Artefakt'), ' ', p.artifact),
       i === PHASES.length - 1 ? h('p.notice.small', 'KI-Projekte sind nie „fertig“: Monitoring liefert die Grundlage für die nächste Iteration – deshalb der Rückkopplungspfeil zur Planung.') : null,
     );
-    progress.textContent = `${visited.size}/7 Phasen angesehen`;
+    progress.textContent = `${visited.size}/${PHASES.length} Phasen angesehen`;
     movePacket();
-    if (visited.size === PHASES.length && c.award(10, 'Widget: Vorgehensmodell erkundet')) c.toast('Alle 7 Phasen erkundet!', { icon: '🧭' });
+    if (visited.size === PHASES.length && c.award(10, 'Widget: KI-Projektlebenszyklus erkundet')) c.toast(`Alle ${PHASES.length} Phasen erkundet!`, { icon: '🧭' });
   }
 
   function stop() {

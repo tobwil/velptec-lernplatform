@@ -115,6 +115,11 @@ try {
     await page.waitForTimeout(200);
     ok(!(await page.textContent('main')).includes('[object '), `Route ${r} rendert ohne Darstellungsfehler`);
     if (r === '#/rangliste') ok(await page.locator('.lb-row').count() >= 1, 'Rangliste zeigt Einträge');
+    if (r === '#/unterlagen') {
+      const rows = await page.locator('tbody tr').count();
+      const empty = await page.locator('tbody tr td:nth-child(3):not(:has(a))').count();
+      ok(rows === 37 && empty === 0, `Skript-Übersicht: ${rows} Abschnitte, alle mit Lektion verknüpft (${empty} ohne)`);
+    }
     if (['#/video', '#/einstellungen', '#/rangliste'].includes(r)) await shot(page, '07-' + r.slice(2));
   }
   // Coach offline

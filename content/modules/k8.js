@@ -491,14 +491,6 @@ Mit dem **KI-Marktüberwachungs- und Innovationsförderungsgesetz (KI-MIG)**, in
           ]
         },
         {
-          type: 'youtube',
-          id: 'BRT2yxE83eI',
-          title: 'Lernvideo: EU AI Act - Teil 1',
-          channel: 'Mittelstand-Digital Zentrum Tourismus',
-          lang: 'de',
-          minutes: 3
-        },
-        {
           type: 'praxis',
           title: 'Den AI-Act-Fahrplan nach dem Omnibus neu aufstellen',
           company: 'Weber Präzisionsteile GmbH (fiktiv), 220 MA, Heilbronn – mit Kunden in den USA',

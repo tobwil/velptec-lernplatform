@@ -195,7 +195,7 @@ Ein Beispiel aus Ngs Vortrag: Bei einer Fehlererkennung auf Stahlblechen brachte
           type: 'callout',
           variant: 'info',
           title: 'Zum Mini-Spiel',
-          md: 'Im folgenden Spiel sortierst du Kundendatensätze. Die Auflösungen verwenden teils andere, ebenfalls gebräuchliche Begriffe: Formatfehler (z. B. Komma in der E-Mail-Adresse) heißen im Skript **Gültigkeit**, Duplikate **Eindeutigkeit**. „Relevanz“ gehört im Skript zur Bedarfshierarchie aus 3.1 (relevante Merkmale). Ordne beim Spielen jede Auflösung gedanklich einer der sechs Skript-Dimensionen zu.',
+          md: 'Im folgenden Spiel sortierst du zehn Kundendatensätze der fiktiven Muster Haustechnik GmbH. Jede Auflösung nennt die betroffene Dimension aus dem Skript – **Korrektheit, Vollständigkeit, Konsistenz, Aktualität, Gültigkeit, Eindeutigkeit**. Achte besonders auf die Fälle, die auf den ersten Blick sauber aussehen.',
         },
         { type: 'interactive', widget: 'data-quality', props: {} },
         {

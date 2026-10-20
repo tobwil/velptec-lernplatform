@@ -58,7 +58,7 @@ export function docsView(main) {
     h('p.muted', 'Die Lernplattform folgt dem offiziellen velpTEC-Theorieskript: Jedes Kapitel ist ein Modul, jeder Abschnitt hat mindestens eine Lektion. Die Lektionen bereiten den Skriptinhalt interaktiv auf, ergänzen Praxisfälle und aktuelle Entwicklungen und nennen jeweils die Skriptseite.'),
     h('div.card',
       h('div.row',
-        h('div', { style: { flex: 1, minWidth: '240px' } }, h('h3', { style: { margin: 0 } }, sk.title), h('div.small.muted', `${sk.publisher} · ${sk.code} · ${sk.pages} Seiten · 8 Kapitel, 38 Abschnitte`)),
+        h('div', { style: { flex: 1, minWidth: '240px' } }, h('h3', { style: { margin: 0 } }, sk.title), h('div.small.muted', `${sk.publisher} · ${sk.code} · ${sk.pages} Seiten · ${sk.chapters.length} Kapitel, ${sk.chapters.reduce((n, c) => n + c.sections.length, 0)} Abschnitte`)),
         h('a.btn.btn-primary', { href: sk.driveUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Original-Skript öffnen ↗')),
       h('p.small.muted', { style: { margin: '10px 0 0' } }, '🔒 Das Skript ist Kursmaterial von velpTEC und wird nicht auf dieser Plattform veröffentlicht. Der Link funktioniert nur für berechtigte Teilnehmende und Dozierende; sonst erhältst du das Skript über deine Lehrkraft bzw. die velpTEC-Lernumgebung.')),
     h('section.section',

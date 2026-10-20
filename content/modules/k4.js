@@ -70,9 +70,9 @@ export default {
         },
         {
           type: 'text',
-          md: `### Feinere Sicht: sieben Arbeitsschritte
+          md: `### Die vier Phasen interaktiv
 
-Viele Praxisleitfäden zerlegen die vier Phasen in kleinere Schritte. Das folgende Widget zeigt ein verbreitetes Modell mit sieben Schritten. So passen sie zum Lebenszyklus des Skripts: **Planung** → Ideenfindung; **Daten** und **Modell** → Entwicklung; **Integration**, **Pilot** und **Roll-out** → Bereitstellung; **Monitoring** → Betrieb. Achte darauf, dass der letzte Schritt wieder in den ersten zurückführt: KI-Projekte sind Kreisläufe.`,
+Im folgenden Widget kannst du die vier Phasen des Skripts – **Ideenfindung, Entwicklung, Bereitstellung, Betrieb** – einzeln öffnen: Ziel, typische Aktivitäten, Rollen, Fallstricke und Ergebnis jeder Phase. Viele Praxisleitfäden zerlegen die Phasen feiner (z. B. Daten, Modell, Integration, Pilot, Roll-out als eigene Schritte) – diese Schritte findest du hier als Aktivitäten wieder. Achte auf die Rückkopplung: Der Betrieb liefert den Input für die nächste Ideenfindung – KI-Projekte sind Kreisläufe.`,
         },
         { type: 'interactive', widget: 'process-steps' },
         {

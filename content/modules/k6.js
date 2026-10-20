@@ -147,14 +147,6 @@ Ein viel zitiertes Paper von Google-Forschenden („Hidden Technical Debt in Mac
           minutes: 8
         },
         {
-          type: 'youtube',
-          id: 'cvPEiPt7HXo',
-          title: 'Large Language Model Operations (LLMOps) Explained',
-          channel: 'IBM Technology',
-          lang: 'en',
-          minutes: 7
-        },
-        {
           type: 'praxis',
           title: 'Von Stufe 0 zu Stufe 1: die Absatzprognose einer Bäckereikette',
           company: 'Backhaus Feldmann GmbH (fiktiv), 28 Filialen, 310 MA, Oldenburg',
