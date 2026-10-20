@@ -38,6 +38,7 @@
 .w-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
 .w-kpis .kpi { background: var(--surface-2); border-radius: var(--radius-sm); padding: 10px 12px; }
 .w-kpis .kpi b { font-size: 1.3rem; }
+.w-field { align-content: start; }
 .w-field .input { min-width: 0; }
 .w-input-suffix { display: flex; align-items: center; gap: 6px; }
 .w-suffix { color: var(--muted); font-size: .85rem; font-weight: 400; white-space: nowrap; }
@@ -292,6 +293,7 @@
 .w-pb-meter { display: grid; gap: 6px; }
 .w .w-pb-checks { margin: 4px 0 0; padding: 0; }
 .w-pb-checks li { font-size: .86rem; margin: 0; }
+.w-pb-checks li.miss { background: var(--surface-2); }
 .w-pb-ai:empty { display: none; }
 
 /* ---------- rag-pipeline ---------- */
@@ -375,7 +377,7 @@
 /* ---------- workflow-builder ---------- */
 .w-workflow-builder .g-trigger { --g: var(--accent); }
 .w-workflow-builder .g-ai { --g: var(--primary); }
-.w-workflow-builder .g-logic { --g: var(--warn); }
+.w-workflow-builder .g-logic { --g: var(--muted); }
 .w-workflow-builder .g-action { --g: var(--success); }
 .w-wf-challenges { border: 1px dashed var(--accent); background: var(--accent-soft); border-radius: var(--radius-sm); padding: 10px 12px; display: grid; gap: 8px; }
 .w-wf-chtabs { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -413,7 +415,7 @@
 .w-tc-layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 @container (max-width: 720px) { .w-tc-layout { grid-template-columns: 1fr; } }
 .w-tc-in { display: grid; gap: 12px; }
-.w-tc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.w-tc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
 .w-tc-fs { display: grid; gap: 8px; }
 .w-tc-classes { display: grid; gap: 8px; }
 .w-tc-class { border: 2px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--surface); }
@@ -448,7 +450,7 @@
 .w-ad-lbl.is-neck { fill: var(--danger); }
 .w-ad-bars { display: grid; gap: 5px; margin-top: 8px; }
 .w-ad-bar { display: grid; grid-template-columns: 18px 1fr 16px; gap: 8px; align-items: center; }
-.w-ad-letter { font-family: var(--font-pixel); font-size: .6rem; }
+.w-ad-letter { font-family: var(--font-pixel); font-size: .7rem; }
 .w-ad-track { height: 10px; background: var(--surface-3); border-radius: 99px; overflow: hidden; }
 .w-ad-track i { display: block; height: 100%; background: var(--primary); border-radius: inherit; transition: width .3s; }
 .w-ad-bar.is-neck i { background: var(--danger); }

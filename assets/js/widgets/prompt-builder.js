@@ -64,7 +64,7 @@ export function assess(v) {
   checks.push({ ok: !sensitive, label: 'Keine erkennbaren personenbezogenen Daten (E-Mail, Telefon, IBAN)', tip: 'Ersetze echte Daten durch Platzhalter, bevor du den Prompt an ein externes Tool gibst.' });
   const score = checks.reduce((a, c) => a + (c.ok ? (c.optional ? 0.5 : 1) : 0), 0);
   const max = checks.reduce((a, c) => a + (c.optional ? 0.5 : 1), 0);
-  return { checks, pct: score / max };
+  return { checks, pct: all.trim() ? score / max : 0 };
 }
 
 export function buildPrompt(v) {

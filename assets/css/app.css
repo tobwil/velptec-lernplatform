@@ -463,3 +463,8 @@ table.tbl caption { caption-side: bottom; text-align: left; padding: 8px 12px; c
   .app { display: block; }
   body { background: #fff; }
 }
+@media (max-width: 600px) {
+  .hide-sm { display: none !important; }
+  .coach-fab { right: 12px; bottom: 12px; padding: 8px 12px; }
+}
+mark { background: var(--accent-soft); color: inherit; padding: 0 2px; border-radius: 3px; }

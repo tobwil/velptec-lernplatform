@@ -70,7 +70,7 @@ export default function mount(el, props = {}, ctx) {
       const [x, y] = pt(i, R + 20);
       return s('text', { class: `w-ad-lbl${i === b ? ' is-neck' : ''}`, x, y: y + 4, 'text-anchor': Math.abs(x - cx) < 5 ? 'middle' : x > cx ? 'start' : 'end' }, `${d.name} ${vals[d.id]}`);
     });
-    return s('svg', { viewBox: `-40 0 ${S + 80} ${S + 10}`, role: 'img', 'aria-label': `Radar-Diagramm: ${DIMS.map((d) => `${d.name} ${vals[d.id]}`).join(', ')}` }, rings, spokes, poly, dots, labels);
+    return s('svg', { viewBox: `-78 0 ${S + 156} ${S + 10}`, role: 'img', 'aria-label': `Radar-Diagramm: ${DIMS.map((d) => `${d.name} ${vals[d.id]}`).join(', ')}` }, rings, spokes, poly, dots, labels);
   }
 
   function render() {
