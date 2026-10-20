@@ -160,6 +160,8 @@ export default function mount(el, props = {}, ctx) {
     ['Eingabe', 'Verborgene Schicht', 'Ausgabe'].forEach((tt, i) => ctx2d.fillText(tt, L.cols[i], 12));
   }
 
+  // Summe als lesbarer Term: „4,0 × 0,70 − 2,0 × 1“
+  const sum = (pairs) => pairs.map(([w, x], i) => `${i ? (w < 0 ? ' − ' : ' + ') : (w < 0 ? '−' : '')}${fmtNum(Math.abs(w), 1)} × ${fmtNum(x, 2)}`).join('');
   function renderText() {
     const res = forward(state.m, state.d);
     const done = state.phase === 3;
@@ -171,11 +173,11 @@ export default function mount(el, props = {}, ctx) {
       : h('div.w-nn-verdict', h('span.small.muted', 'Starte den Forward-Pass, um die Ausgabe zu berechnen.')));
     const rows = W1.map((w, j) => h('tr',
       h('td', HIDDEN_NAMES[j]),
-      h('td.w-mono', `${fmtNum(w[0], 1)}·${fmtNum(res.x[0], 2)} + ${fmtNum(w[1], 1)}·${fmtNum(res.x[1], 2)} + ${fmtNum(w[2], 1)}·1 = ${fmtNum(res.zH[j], 2)}`),
+      h('td.w-mono', `${sum([[w[0], res.x[0]], [w[1], res.x[1]], [w[2], 1]])} = ${fmtNum(res.zH[j], 2)}`),
       h('td.w-mono', `σ(z) = ${fmtNum(res.a[j], 3)}`)));
     const orows = W2.map((w, k) => h('tr',
       h('td', OUT_NAMES[k]),
-      h('td.w-mono', `${w.slice(0, 4).map((wj, j) => `${fmtNum(wj, 1)}·${fmtNum(res.a[j], 2)}`).join(' + ')} + (${fmtNum(w[4], 1)}) = ${fmtNum(res.zO[k], 2)}`),
+      h('td.w-mono', `${sum([...w.slice(0, 4).map((wj, j) => [wj, res.a[j]]), [w[4], 1]])} = ${fmtNum(res.zO[k], 2)}`),
       h('td.w-mono', `Softmax = ${fmtPct(res.y[k], 1)}`)));
     fill(calcBox, 
       h('p', `Eingaben normiert: x₁ = ${state.m}/10 = ${fmtNum(res.x[0], 2)}, x₂ = ${state.d}/120 = ${fmtNum(res.x[1], 2)}, Bias = 1 (${IN_NAMES.join(', ')}).`),

@@ -130,7 +130,7 @@ export default function mount(el, props = {}, ctx) {
     n = Math.max(0, Math.min(STEPS.length - 1, n));
     if (STEPS[n].needsApproval && approval === false) n += n < prev ? -1 : 1;
     i = n;
-    if (i < APPROVAL_IDX) approval = null;
+    if (i <= APPROVAL_IDX) approval = null;
     render();
   }
   function next() {

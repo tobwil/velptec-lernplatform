@@ -243,7 +243,7 @@ export default function mount(el, props = {}, ctx) {
         h('p.small', 'Verstöße können mit Geldbußen von bis zu 35 Mio. € oder 7 % des weltweiten Jahresumsatzes geahndet werden (Art. 99). Empfehlung: Vorhaben stoppen und mit Rechtsabteilung/Datenschutz prüfen.'));
     } else {
       if (r.cls === 'hoch') {
-        parts.push(h('p', `Grundlage: ${r.hr}.`), h('h4', `Pflichten als ${role}`), ul(answers.role === 'anbieter' ? PROVIDER_HR : DEPLOYER_HR));
+        parts.push(h('p', `Grundlage: ${r.hr}.`), h('p.small.muted', `Die Hochrisiko-Pflichten gelten ab ${answers.annex1 === 'yes' ? '02.08.2028 (Anhang I)' : '02.12.2027 (Anhang III)'} – Stand Oktober 2026, siehe Zeitplan unten. Vorbereitung lohnt sich schon jetzt.`), h('h4', `Pflichten als ${role}`), ul(answers.role === 'anbieter' ? PROVIDER_HR : DEPLOYER_HR));
         if (answers.role !== 'anbieter') parts.push(h('p.small.muted', 'Achtung: Wer ein Hochrisiko-System unter eigenem Namen anbietet, wesentlich verändert oder seine Zweckbestimmung ändert, wird selbst zum Anbieter (Art. 25).'));
       }
       if (r.exception) {

@@ -118,7 +118,7 @@ export function generateOffline(text, { title, fileName }) {
     const cards = termsFallback.map((k) => ({ front: stats.display(k), back: defineTerm(stats.display(k), sents) || defineTerm(stats.display(k), allSentences) })).filter((c) => c.back);
     if (cards.length) blocks.push({ type: 'flipcards', cards });
     const qc = makeClozeQuestion(summary[1] || summary[0], keyTerms, stats, si);
-    if (qc) blocks.push({ type: 'quickcheck', qtype: qc.type, ...qc });
+    if (qc) blocks.push({ ...qc, type: 'quickcheck', qtype: qc.type });
     blocks.push({
       type: 'praxis',
       title: 'Transfer in deinen Arbeitsalltag',

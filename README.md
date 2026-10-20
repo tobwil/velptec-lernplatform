@@ -1,93 +1,252 @@
 # velpTEC Lernplattform · Weiterbildung KI-Management
 
-Interaktive Lernplattform zur geförderten Weiterbildung **KI-Management** (velpTEC).
-Sie läuft komplett statisch im Browser (kein Server, kein Build, keine Datenbank) und funktioniert **vollständig ohne KI**.
-KI-Unterstützung ist optional und wird von den Lernenden in den Einstellungen mit eigenem API-Key aktiviert.
+Interaktive Lernplattform für die geförderte Weiterbildung **KI-Management** bei velpTEC:
+12 Module mit Praxisbezug, Quiz, Animationen, ein Pixel-Erklärfilm aus Code, Rangliste, Übungen mit Feedback
+und die Möglichkeit, aus eigenen Übungsdokumenten neue Lektionen zu erzeugen.
 
-## Funktionen
+- **Läuft komplett im Browser:** Es gibt weder Server noch Datenbank oder Build-Schritt.
+- **Funktioniert vollständig ohne KI.** Die KI-Unterstützung ist optional. Lernende aktivieren sie selbst in den Einstellungen mit eigenem API-Key, entweder für Claude (Standard: `claude-haiku-5-5`), OpenAI, Gemini oder ein lokales Modell.
 
-| Bereich | Was es gibt |
+![Dashboard](docs/screenshots/01-dashboard.png)
+
+---
+
+## Inhalt
+
+1. [Was die Plattform kann](#was-die-plattform-kann)
+2. [Screenshots](#screenshots)
+3. [So nutzt du die Plattform (Lernende)](#so-nutzt-du-die-plattform-lernende)
+4. [Für Lehrkräfte und Dozierende](#für-lehrkräfte-und-dozierende)
+5. [Was gebaut wurde und wie](#was-gebaut-wurde-und-wie)
+6. [Starten, Hosten, Entwickeln](#starten-hosten-entwickeln)
+7. [Datenschutz](#datenschutz)
+8. [Grenzen und offene Punkte](#grenzen-und-offene-punkte)
+
+---
+
+## Was die Plattform kann
+
+| Bereich | Umfang |
 |---|---|
-| **12 Module** | 8 Module auf Basis des Original-Handouts „KI-Management kompakt“ + 4 neue Module, die im Handout fehlen: Generative KI & LLMs, **Automatisierung & KI-Agenten mit n8n**, KI-Werkzeugkasten (Open Source, lokale Modelle, Vibe Coding), Nachhaltigkeit & Kosten |
-| **Praxisbezug** | Jede Lektion enthält mindestens einen Praxisfall (fiktive Mittelstandsbeispiele oder reale, belegte Fälle) |
-| **Originaldokument** | `docs/Handout-KI-Management.pdf` ist eingebunden (Viewer + Download); jede Lektion verweist mit Kapitel und Seite darauf. Wo das Handout veraltet ist (z. B. EU AI Act), gibt es markierte **Aktualisierungen** mit Belegen |
-| **Quellen** | Überprüfbare Quellen je Modul (Gesetze, Normen, Studien, offizielle Dokus) + Gesamtverzeichnis; Linkprüfung per `npm run links` |
-| **Interaktiv** | 14 Widgets (u. a. AI-Act-Klassifizierer, n8n-Workflow-Baukasten, Agenten-Schleife, RAG-Pipeline, Konfusionsmatrix, ROI- und Token-Rechner, Use-Case-Matrix, ADKAR-Check), Lernkarten, animierte Schrittfolgen, Zeitstrahlen |
-| **Quiz** | 6 Fragetypen (Single/Multi-Choice, Richtig/Falsch, Reihenfolge, Zuordnung, Lückentext) mit Erklärung zu jeder Antwort, Quick-Checks in Lektionen, Tagesfrage |
-| **Gamification** | XP, 11 Level, 16 Badges, Lernserie, **Wissens-Sprint** (90 s), **Rangliste** (lokale Profile, teilbare Score-Karten, optional Online-Rangliste per n8n-Webhook), gelegentlicher Konfetti-Regen |
-| **Video** | **Pixel-Motion-Graphic-Film** (~1:50), komplett aus Code: eigener 5×7-Bitmap-Font, Sprites als Zeichenketten, Szenen als Zeitfunktionen, synthetisierter Chiptune-Soundtrack. Im Browser abspielbar (mit Kapiteln, Szenen auch in Lektionen), als WebM aufnehmbar, als MP4 vorgerendert (`media/`). Dazu geprüfte YouTube-Videos (Zwei-Klick-Lösung, youtube-nocookie) |
-| **Übungen** | Praxisszenario, Aufgabe, Bewertungsraster, gestufte Tipps, Offline-Check (Rubrik-Abgleich), Dateianhang (PDF/DOCX …), Musterlösung erst nach Abgabe |
-| **KI-Feedback (optional)** | Formatives Feedback je Kriterium + Nachfrage-Dialog; der Coach „Pixel“ führt mit Leitfragen hin statt vorzusagen. Ohne KI: Offline-Suche im Kursmaterial |
-| **Eigene Lektionen** | Übungsdokumente hochladen (PDF, DOCX, PPTX, XLSX, ODT, TXT, MD, HTML) → neue Lektion mit Kernaussagen, Merksatz, Lernkarten, Quiz und Transferaufgabe. Offline per Textanalyse oder mit KI; als JSON teil- und importierbar |
-| **Design** | Hell/Dunkel/Auto, ruhiges Indigo (Fokus) + warmes Amber (Motivation), responsiv, Tastaturbedienung, `prefers-reduced-motion` |
+| **Kursinhalte** | 12 Module, 47 Lektionen, 141 Quizfragen + 86 Quick-Checks, 24 Übungsaufgaben, 127 Quellen |
+| **Originaldokument** | Das Handout „KI-Management kompakt“ liegt unter `docs/Handout-KI-Management.pdf`. Es ist eingebettet und kann heruntergeladen werden. Jede Lektion zitiert es wörtlich mit Kapitel und Seite. |
+| **Aktualisierungen** | An Stellen, an denen das Handout veraltet ist, steht ein markierter Hinweis „Aktualisierung zum Handout“ mit Belegen. Beispiel: Das Handout nennt den „EU AI Act – Entwurf 2024“. Tatsächlich ist er seit 1.8.2024 in Kraft, und 2026 hat der Digital Omnibus (VO (EU) 2026/1744) mehrere Fristen verschoben. |
+| **Neue Themen** | Vier Module fehlen im Handout und sind neu: **Generative KI & LLMs**, **Automatisierung & KI-Agenten mit n8n** (inkl. MCP, Make/Zapier/Power Automate), **KI-Werkzeugkasten** (Hugging Face, Ollama, LM Studio, europäische Anbieter, Vibe Coding) und **Nachhaltigkeit & Kosten**. |
+| **Praxisbezug** | Jede Lektion hat mindestens einen Praxisfall. Das sind entweder fiktive, als solche gekennzeichnete Mittelstandsbeispiele oder reale, belegte Fälle (z. B. Klarna, Air Canada, DPD, Otto Group). |
+| **Interaktiv** | 14 Widgets: AI-Act-Klassifizierer, n8n-Workflow-Baukasten mit Challenges, Agenten-Schleife, RAG-Pipeline, Prompt-Builder, Konfusionsmatrix, ROI-Rechner, Token- und Energie-Rechner, Use-Case-Matrix, Risiko-Matrix, ADKAR-Check, Datenqualitäts-Spiel, neuronales Netz und Vorgehensmodell. Dazu Lernkarten, animierte Schrittfolgen und Zeitstrahlen. |
+| **Quiz** | 6 Fragetypen: Single Choice, Multiple Choice, Richtig/Falsch, Reihenfolge, Zuordnung und Lückentext. Jede Antwort wird erklärt. Dazu kommen Quick-Checks mitten in den Lektionen und eine Tagesfrage. |
+| **Motivation** | XP, 11 Level, 16 Badges und eine Lernserie. Im Wissens-Sprint beantwortet man 90 Sekunden lang Fragen und kann Combos sammeln. Hinzu kommen eine Rangliste und gelegentlicher Konfetti-Regen. |
+| **Videos** | Der **Pixel-Motion-Graphic-Film** (1:47) ist komplett aus Code erzeugt, inklusive Chiptune-Soundtrack. Dazu kommen 18 geprüfte YouTube-Videos, die erst nach Klick laden (youtube-nocookie). |
+| **Übungen** | Jede Übung hat ein Szenario, eine Aufgabe und ein Bewertungsraster. Es gibt gestufte Tipps, einen Offline-Check und optional KI-Feedback mit Nachfrage-Dialog. Die Musterlösung wird erst nach der Abgabe freigeschaltet. |
+| **Eigene Lektionen** | Hochgeladene Übungsdokumente (PDF, DOCX, PPTX, XLSX, ODT, TXT, MD, HTML) werden zu einer neuen Lektion – offline oder mit KI. |
+| **Lerncoach „Pixel“** | Mit KI arbeitet der Coach als hinführender Tutor, der Leitfragen statt Lösungen gibt. Ohne KI durchsucht er das gesamte Kursmaterial. |
+| **Design** | Hell, dunkel oder automatisch. Ein ruhiges Indigo hilft bei der Konzentration, ein warmes Amber motiviert. Die Plattform ist responsiv, per Tastatur bedienbar und respektiert „Bewegung reduzieren“. |
 
-## KI-Anbieter (optional)
+---
 
-Einstellungen → „KI-Unterstützung“: Anbieter wählen, Modell, API-Key. Der Key wird **nur im localStorage** des Browsers gespeichert und direkt an den Anbieter gesendet (kein Zwischenserver).
+## Screenshots
 
-| Anbieter | Standardmodell | Hinweis |
-|---|---|---|
-| Anthropic Claude | `claude-haiku-5-5` | Standard für textbasierte Interaktion |
-| OpenAI | `gpt-6-luna` | |
-| Google Gemini | `gemini-3.8-flash` | |
-| OpenAI-kompatibel | frei | z. B. LM Studio (`http://localhost:1234/v1`) oder Ollama (`http://localhost:11434/v1`) – Daten bleiben lokal |
+| | |
+|---|---|
+| ![Dashboard dunkel](docs/screenshots/02-dashboard-dunkel.png) **Dunkelmodus.** Dashboard mit Level, Lernserie, Tagesfrage und Modulen. | ![n8n-Baukasten](docs/screenshots/03-widget-n8n.png) **Interaktiv.** n8n-Workflow-Baukasten mit Challenges und animiertem Testlauf. |
+| ![Praxisfall](docs/screenshots/04-praxis-handout.png) **Praxisbezug.** Jede Lektion enthält einen konkreten Praxisfall mit Schritten und Take-away. | ![Quiz](docs/screenshots/05-quiz.png) **Quiz.** Sofortige Erklärung, auch bei falschen Antworten. |
+| ![Pixel-Film](docs/screenshots/06-pixelfilm.png) **Pixel-Film.** Komplett aus Code, mit Kapiteln, als MP4 oder direkt im Browser aufnehmbar. | ![Rangliste](docs/screenshots/07-rangliste.png) **Rangliste.** Gesamt-XP, Wissens-Sprint und Lernfortschritt. |
+| ![Upload](docs/screenshots/08-upload.png) **Eigene Lektionen.** Dokument hochladen, Text prüfen und Lektion erzeugen. | ![Generierte Lektion](docs/screenshots/09-eigene-lektion.png) **Ergebnis:** Kernaussagen, Merksatz, Lernkarten, Quick-Check, Praxis-Transfer und Quiz. |
+| ![KI-Feedback](docs/screenshots/11-uebung-ki-feedback.png) **Optionales KI-Feedback.** Bewertung je Kriterium und eine Leitfrage statt der fertigen Lösung. | ![Einstellungen](docs/screenshots/12-einstellungen-ki.png) **KI-Einstellungen.** Anbieter frei wählbar, API-Key nur im localStorage. |
 
-Modellnamen ändern sich – „Verfügbare Modelle laden“ fragt die aktuelle Liste beim Anbieter ab.
+<img src="docs/screenshots/13-mobil.png" alt="Mobilansicht" width="260">
 
-## Starten
+*Mobilansicht*
+
+> Die Screenshots erzeugt `node tools/screenshots.mjs` automatisch mit einem Beispiel-Lernstand. Das KI-Feedback auf dem Bild ist eine simulierte Antwort; mit echtem API-Key antwortet das gewählte Modell.
+
+---
+
+## So nutzt du die Plattform (Lernende)
+
+1. **Öffnen und Namen eingeben.** Ein Spitzname reicht. Er erscheint nur in der Rangliste.
+2. **Mit Modul 1 starten** oder über „Weiter“ dort einsteigen, wo du aufgehört hast. Jede Lektion schließt du mit **„✓ Erledigt“** ab (+20 XP).
+3. **Lektionen durcharbeiten:**
+   - Text, Merksätze und Lernkarten (zum Umdrehen anklicken)
+   - **Praxis-Kästen** (grün) mit Bezug zum Arbeitsalltag
+   - **Handout-Kästen** (blau) mit Kapitel und Seite. Ein Klick öffnet das Original-PDF an der richtigen Stelle.
+   - **Aktualisierungen** (gelb gestrichelt) zeigen an, wo sich seit dem Handout etwas geändert hat.
+   - **Interaktive Elemente** und **Quick-Checks** helfen dir zu prüfen, ob du es verstanden hast.
+4. **Modul-Quiz:** Ab 70 % ist es bestanden, und damit gilt das Modul als abgeschlossen. Du kannst es beliebig oft wiederholen.
+5. **Übungen:** Bearbeitung schreiben (eine Datei anhängen geht auch) und dann
+   - **„💡 Tipp“** nutzen, wenn du festhängst; die Tipps werden schrittweise konkreter.
+   - Mit **„✅ Offline-Check“** prüfst du, welche Kriterien des Bewertungsrasters schon erkennbar sind.
+   - Ist die KI aktiviert, holst du dir mit **„🤖 KI-Feedback“** Rückmeldung und kannst nachfragen.
+   - Nach dem **„📨 Abgeben“** wird die Musterlösung freigeschaltet.
+6. **Dranbleiben:** Beantworte die **Tagesfrage** auf der Übersicht und spiel den **Wissens-Sprint**. Schau in **„Mein Fortschritt“** nach Badges und Level.
+7. **Pixel-Film** unter „Pixel-Erklärfilm“ ansehen. Er gibt einen Überblick über den ganzen Kurs und bringt einen Badge.
+8. **Lerncoach (🤖 unten rechts):** Er beantwortet Fragen zur aktuellen Lektion. Ohne KI sucht er passende Stellen im Kurs.
+9. **Eigene Lektionen:** Unter „Dokument hochladen“ eine Unterlage auswählen, Text prüfen, Lektion erzeugen.
+10. **KI aktivieren (optional):** Unter **Einstellungen → KI-Unterstützung**:
+    - Anbieter wählen und den API-Key einfügen. Die Links zum Erstellen eines Keys stehen dort.
+    - „Verbindung testen“ klicken.
+    - Wer Daten lokal halten will, nimmt **„OpenAI-kompatibel“** mit LM Studio oder Ollama.
+11. **Gerät wechseln:** Unter Einstellungen den Lernstand mit „Fortschritt sichern“ speichern und auf dem anderen Gerät mit „Sicherung laden“ einspielen.
+
+Hell- und Dunkelmodus schaltest du oben rechts (🌗/☀️/🌙) um. Konfetti und Ton lassen sich in den Einstellungen abschalten.
+
+## Für Lehrkräfte und Dozierende
+
+- **Rangliste in der Gruppe:**
+  - **Ohne Server:** Jede Person teilt über „Meine Score-Karte teilen“ einen Code oder eine Datei. Die Lehrkraft importiert alle Karten unter „Karten importieren“. Veränderte Karten werden über eine Prüfsumme erkannt und verworfen.
+  - **Automatisch per n8n**, als kleines Praxisprojekt passend zu Modul 10:
+    1. `docs/n8n-rangliste-workflow.json` in n8n importieren und aktivieren.
+    2. Die Produktions-Webhook-URL unter Einstellungen → „Gemeinsame Online-Rangliste“ eintragen.
+- **Geteilte Rechner im Schulungsraum:** Unter „Mein Fortschritt“ lassen sich mehrere Profile anlegen und wechseln.
+- **Eigene Unterlagen als Lektion:**
+  1. Unter „Eigene Lektionen“ ein Dokument hochladen.
+  2. Die erzeugte Lektion als JSON exportieren.
+  3. Die Datei an die Gruppe weitergeben; sie wird dort unter „Geteilte Lektion importieren“ eingespielt.
+- **Inhalte anpassen:** Die Module liegen als gut lesbare Dateien in `content/modules/` (Format: [`docs/CONTENT_SCHEMA.md`](docs/CONTENT_SCHEMA.md)). `npm run validate` prüft Änderungen.
+- **Präsentation:** Der Pixel-Film liegt als `media/ki-management-pixelfilm.mp4` bereit (1280×720) und kann direkt im Unterricht oder im LMS gezeigt werden.
+
+---
+
+## Was gebaut wurde und wie
+
+### 1. Ausgangsmaterial und Inhalte
+
+- **Originaldokument:** Das Handout *„KI-Management kompakt“* (Zeitlmann & Wilhelm, KIsruptiv GbR; 8 Seiten, fasst das 230-seitige Skript zusammen) kommt aus dem Google Drive des Dozenten und liegt unverändert als PDF unter `docs/`. In `content/course.js` sind alle 15 Kapitel mit Seitenzahl den Lernmodulen zugeordnet.
+- **Workshop-Zusammenfassung vom 30.06.2026:** Daraus stammen die neuen Themen n8n, Vibe Coding, Open Source und Nachhaltigkeit sowie die Links zu den KIsruptiv-Ressourcen.
+- **Schema zuerst:** Damit Inhalte und Technik getrennt bleiben, ist das Inhaltsformat zuerst als Schema festgelegt ([`docs/CONTENT_SCHEMA.md`](docs/CONTENT_SCHEMA.md)). Es beschreibt Lektionsblöcke wie Text, Merksatz, Praxis, Handout-Zitat, Aktualisierung, Tabelle, Lernkarten, Schritte, Zeitstrahl, Widget, Video und Quick-Check. Dazu kommen Fragetypen, Übungen mit Bewertungsraster sowie Quellen.
+- **Erstellung:** Die 12 Module haben vier parallel arbeitende Recherche-Agenten nach festen Qualitätsregeln geschrieben:
+  - Jede Quelle wurde vor dem Eintragen abgerufen und auf Inhalt geprüft. Primärquellen wie EUR-Lex, BSI, NIST, Gesetze im Internet, Herstellerdoku und arXiv gingen vor.
+  - **Keine erfundenen Zahlen.** Fiktive Beispielunternehmen sind als „(fiktiv)“ gekennzeichnet.
+  - Handout-Zitate wurden Wort für Wort gegen den PDF-Text abgeglichen.
+  - YouTube-Videos wurden über die oEmbed-Schnittstelle verifiziert (Titel und Kanal).
+  - `tools/validate-content.mjs` erzwingt die Struktur, z. B. einen Praxisblock pro Lektion, mindestens 6 Quizfragen mit Erklärung und ein Bewertungsraster pro Übung.
+- **Linkprüfung:** `tools/check-links.mjs` hat zuletzt 183 Links geprüft. Seiten mit Bot-Sperre (EUR-Lex, ISO, BCG, Reuters, IEA) wurden zusätzlich manuell bzw. über Zweitquellen bestätigt.
+
+### 2. Technik
+
+- **Vanilla JavaScript (ES-Module), HTML und CSS**, ohne Framework und ohne Build. So bleibt die Plattform langfristig wartbar und lässt sich auf jedem Webspace hosten.
+- **Hash-Routing** (`#/modul/m05/lektion/…`). Views werden erst bei Bedarf geladen, Widgets ebenfalls.
+- **Speicherung:** Lernstand und Einstellungen liegen im `localStorage`, hochgeladene bzw. erzeugte Lektionen in **IndexedDB**.
+- **Design-Tokens:** Hell- und Dunkelmodus laufen über CSS-Variablen. Das Farbschema kombiniert Indigo für Konzentration, Amber zur Motivation und Mint für Erfolg.
+- **Gamification** (`assets/js/gamification.js`): XP mit „einmalig“-Schlüsseln, damit niemand Punkte farmen kann. Dazu kommen Level-Schwellen, Badge-Regeln und die Lernserie.
+
+### 3. Pixel-Motion-Graphic aus Code (`assets/js/video/`)
+
+- `engine.js`:
+  - eigener **5×7-Bitmap-Font** (inkl. ÄÖÜ und Sonderzeichen)
+  - Zeichenprimitive (Bresenham-Linien, Pixel-Kreise)
+  - **Sprites als Zeichenketten**, z. B. der Roboter „Pixel“
+  - deterministischer Zufall: Jedes Bild ist eine reine Funktion der Zeit.
+- `scenes.js`: 11 Szenen, von „Was ist KI?“ über Strategie, EU AI Act und n8n bis zu RAG/Agenten und KPIs. Übergänge laufen als Pixel-Wipes.
+- `music.js`: ein **Chiptune-Soundtrack**, mathematisch synthetisiert aus Rechteck, Dreieck und Rauschen mit Akkordfolge a-F-C-G. Derselbe Code läuft im Browser (WebAudio) und in Node (WAV-Export).
+- `player.js`: Player mit Kapiteln, Vollbild und **WebM-Aufnahme direkt im Browser** (MediaRecorder).
+- `tools/render-video.mjs` rendert den Film Bild für Bild in Headless-Chromium. ffmpeg skaliert pixelgenau auf 720p und fügt den Ton hinzu → `media/ki-management-pixelfilm.mp4`.
+
+### 4. Optionale KI (`assets/js/ai.js`)
+
+- **Eine Schnittstelle für vier Anbieter:**
+  - Anthropic Messages API mit Header `anthropic-dangerous-direct-browser-access` für den direkten Browser-Zugriff, Standardmodell `claude-haiku-5-5`, geringer Denkaufwand für schnelle Antworten
+  - OpenAI Chat Completions
+  - Google Gemini `generateContent`
+  - OpenAI-kompatible lokale Server
+- **„Verfügbare Modelle laden“** fragt die Modellliste beim Anbieter ab, weil sich Modellnamen ändern.
+- **Didaktik im System-Prompt:** Der Coach unterstützt und führt hin. Er gibt Leitfragen statt Lösungen, knüpft an die Praxis und das Handout an und benennt Unsicherheit offen. Das Übungsfeedback folgt einer festen Struktur: Gesamteindruck, ✅/🟡/❌ je Kriterium, Stärken und nächster Schritt.
+- **Ohne KI** bleibt alles nutzbar: Offline-Check über das Bewertungsraster, gestufte Tipps, Musterlösung und eine Volltextsuche im Coach.
+
+### 5. Lektionen aus Übungsdokumenten (`extract.js`, `generator.js`)
+
+- **Textextraktion im Browser:** PDF über das lokal eingebundene **pdf.js**. DOCX, PPTX, XLSX und ODT werden mit einem eigenen kleinen **ZIP-Leser** (`DecompressionStream`) entpackt und das enthaltene XML ausgelesen.
+- **Offline-Generator:**
+  - Abschnitte anhand von Überschriften erkennen
+  - Schlüsselbegriffe über Häufigkeit bestimmen (Substantive bevorzugt, Stoppwörter gefiltert)
+  - Kernsätze mit der höchsten Begriffsdichte auswählen
+  - daraus Merksatz, Lernkarten, Lückentext- und Richtig/Falsch-Fragen sowie eine Transferaufgabe mit Bewertungsraster erzeugen
+- **KI-Generator:** Er arbeitet mit einem strukturierten JSON-Auftrag. Die Antwort wird gegen das Schema bereinigt; scheitert die KI, wird automatisch offline erzeugt.
+
+### 6. Qualitätssicherung
+
+- `npm test`: End-to-End-Test in Headless-Chromium. Er prüft:
+  - alle 47 Lektionen, Quiz-Durchlauf, Übung mit Offline-Check und Abgabe
+  - Upload und Generator sowie alle Seiten und den Coach
+  - **gemockte Aufrufe an Claude, OpenAI und Gemini** (Format, Header, Anzeige)
+  - Dunkelmodus und mobile Ansicht ohne horizontales Scrollen
+  - keine JavaScript-Fehler
+- `tests/widgets.html`: Testseite für alle 14 Widgets in hell und dunkel.
+
+---
+
+## Starten, Hosten, Entwickeln
 
 ```bash
-npm start            # http://localhost:8080 (oder: node tools/static-server.mjs 8080)
+npm start                      # startet http://localhost:8080
+# alternativ ohne npm:
+node tools/static-server.mjs 8080
 ```
 
-Die Seite muss über einen Webserver laufen (ES-Module), nicht per Doppelklick. Für den Einsatz reicht jedes statische Hosting (GitHub Pages, Netlify, Moodle-Dateiablage mit Webserver …). Ein GitHub-Pages-Workflow liegt unter `.github/workflows/pages.yml` (in den Repository-Einstellungen „Pages → Source: GitHub Actions“ aktivieren).
+Die Seite muss über einen Webserver laufen, weil sie ES-Module nutzt. Per Doppelklick als Datei geht es nicht.
 
-## Entwicklung
+**Hosting:** Jedes statische Hosting funktioniert (GitHub Pages, Netlify, eigener Webspace). Für GitHub Pages liegt `.github/workflows/pages.yml` bei; aktiviert wird es unter Repository → Settings → Pages → Source: „GitHub Actions“. Bei jedem Push auf `main` wird dann neu veröffentlicht.
 
 ```bash
-npm run validate     # Inhaltsmodule gegen docs/CONTENT_SCHEMA.md prüfen
-npm test             # End-to-End-Test in Headless-Chromium (Playwright)
-npm run links        # Alle Quellen-Links und YouTube-IDs prüfen
-npm run video        # Pixel-Film als MP4 rendern (benötigt ffmpeg + Playwright)
+npm run validate               # Inhaltsmodule gegen das Schema prüfen
+npm test                       # End-to-End-Tests (Playwright + Chromium)
+npm run links                  # alle Quellen-Links und YouTube-IDs prüfen
+npm run video                  # Pixel-Film als MP4 rendern (ffmpeg nötig)
+node tools/screenshots.mjs     # README-Screenshots neu erzeugen
 ```
 
-### Struktur
+### Projektstruktur
 
 ```
-index.html                  App-Shell
-assets/css/                 Design-Tokens (hell/dunkel), Komponenten, Widget-Styles
-assets/js/app.js            Routing, Navigation, Onboarding
-assets/js/ai.js             Anbieterneutrale KI-Schnittstelle + Tutor-Prompts
-assets/js/quiz.js           Quiz-Engine
-assets/js/exercise.js       Übungen, Offline-Check, KI-Feedback
-assets/js/generator.js      Lektionen aus Dokumenten (offline/KI)
-assets/js/extract.js        Textextraktion (PDF via vendor/pdfjs, Office via ZIP/XML)
-assets/js/video/            Pixel-Engine, Szenen, Chiptune, Player
-assets/js/widgets/          14 interaktive Widgets
-content/course.js           Kursindex + Handout-Kapitelzuordnung
-content/modules/m01–m12.js  Lerninhalte (Schema: docs/CONTENT_SCHEMA.md)
-docs/                       Original-Handout (PDF), Inhaltsschema, n8n-Vorlage Rangliste
-media/                      Vorgerendertes MP4 des Pixel-Films
-tools/                      Validator, Linkprüfer, Video-Renderer, statischer Server
-tests/                      E2E-Test, Widget-Testseite
+index.html                     App-Shell
+assets/css/                    Design-Tokens hell/dunkel, Komponenten, Widget-Styles
+assets/js/app.js               Navigation, Routing, Onboarding
+assets/js/ai.js                anbieterneutrale KI + Tutor-Prompts
+assets/js/quiz.js              Quiz-Engine (6 Fragetypen)
+assets/js/exercise.js          Übungen, Offline-Check, KI-Feedback
+assets/js/coach.js             Lerncoach (KI oder Offline-Suche)
+assets/js/extract.js           Textextraktion aus Dokumenten
+assets/js/generator.js         Lektionen aus Dokumenten (offline / KI)
+assets/js/gamification.js      XP, Level, Badges, Fortschritt
+assets/js/video/               Pixel-Engine, Szenen, Chiptune, Player
+assets/js/widgets/             14 interaktive Widgets
+assets/js/views/               Seiten (Dashboard, Modul, Sprint, Rangliste, …)
+content/course.js              Kursindex + Handout-Kapitelzuordnung
+content/modules/m01–m12.js     Lerninhalte
+docs/                          Original-Handout, Inhaltsschema, n8n-Vorlage, Screenshots
+media/                         vorgerendertes MP4 des Pixel-Films
+vendor/pdfjs/                  pdf.js 4.10.38 (Apache-2.0)
+tools/                         Validator, Linkprüfer, Video- und Screenshot-Renderer, Server
+tests/                         E2E-Test, Widget-Testseite
 ```
 
-### Inhalte erweitern
+### Neues Modul hinzufügen
 
-Neues Modul als `content/modules/mXX.js` nach `docs/CONTENT_SCHEMA.md` anlegen, die ID in `content/course.js` (`MODULE_IDS`) eintragen und `npm run validate` ausführen.
+1. `content/modules/m13.js` nach [`docs/CONTENT_SCHEMA.md`](docs/CONTENT_SCHEMA.md) anlegen.
+2. `'m13'` in `MODULE_IDS` in `content/course.js` eintragen.
+3. `npm run validate && npm test` ausführen.
 
-### Online-Rangliste mit n8n (optional)
-
-`docs/n8n-rangliste-workflow.json` in n8n importieren, aktivieren und die Produktions-Webhook-URL in den Einstellungen der Plattform eintragen. Der Workflow nimmt Score-Karten per POST an und liefert sie per GET zurück (Speicherung in den statischen Workflow-Daten, nur im aktiven Workflow persistent). Die Vorlage ist ein Startpunkt und sollte in der eigenen n8n-Instanz getestet werden.
+---
 
 ## Datenschutz
 
-- Lernfortschritt, Profile und eigene Lektionen bleiben im Browser (localStorage/IndexedDB). Sicherung/Wiederherstellung in den Einstellungen.
-- Ohne aktivierte KI werden keine Inhalte an Dritte übertragen. Externe Ressourcen: Google Fonts (Pixel-Schrift) und YouTube erst nach Klick.
-- Mit aktivierter KI gehen Eingaben an den gewählten Anbieter – keine personenbezogenen oder vertraulichen Daten eingeben.
+- **Fortschritt, Profile und eigene Lektionen** bleiben im Browser. Es gibt kein Tracking und keinen Server.
+- **Ohne KI** werden keine Inhalte an Dritte übertragen. Externe Ressourcen sind nur die Pixel-Schrift von Google Fonts und YouTube-Videos, die erst nach ausdrücklichem Klick laden.
+- **Mit KI:**
+  - Der API-Key liegt nur im `localStorage` und geht direkt an den gewählten Anbieter.
+  - Abgaben, Fragen und Dokumenttexte werden an diesen Anbieter gesendet. Deshalb weist die Oberfläche darauf hin, keine personenbezogenen oder vertraulichen Daten einzugeben.
+  - Für maximale Datenhoheit gibt es die Option „OpenAI-kompatibel“ mit einem lokalen Modell (LM Studio/Ollama).
 
-## Lizenzen & Quellen
+## Grenzen und offene Punkte
+
+- **Aktualität:** Rechts- und Marktinhalte haben den Stand Oktober 2026. Gesetze (EU AI Act/Digital Omnibus, KI-MIG), Modellnamen und Preise ändern sich; vor dem Kursstart lohnt ein Blick auf die verlinkten Primärquellen.
+- **Rangliste:** Die Rangliste ohne Server basiert auf Vertrauen. Die Prüfsumme der Score-Karten verhindert einfaches Manipulieren, ist aber keine echte Sicherheit.
+- **n8n-Vorlage:** `docs/n8n-rangliste-workflow.json` ist ein Startpunkt und wurde nicht in einer laufenden n8n-Instanz getestet. Bitte vor dem Einsatz im eigenen n8n prüfen; die CORS-Einstellung „Allowed Origins“ steht am Webhook.
+- **Offline-Generator:** Er wählt Sätze aus dem Dokument aus, formuliert aber nicht neu. Das Ergebnis ist umso besser, je besser das Dokument gegliedert ist. Gescannte PDFs ohne Textebene brauchen vorher eine Texterkennung (OCR).
+- **KI-Funktionen:** Sie sind gegen die Schnittstellen-Formate getestet (gemockt), mit echten Keys aber nicht automatisiert. Die Verbindung lässt sich in den Einstellungen per „Verbindung testen“ prüfen.
+
+## Lizenzen
 
 - Handout „KI-Management kompakt“: © Zeitlmann & Wilhelm KIsruptiv GbR.
-- pdf.js 4.10.38 (Mozilla, Apache-2.0) unverändert unter `vendor/pdfjs/`.
-- Alle übrigen Inhalte und der Code wurden für diese Plattform erstellt; externe Quellen sind in den Modulen verlinkt.
+- pdf.js 4.10.38 (Mozilla, Apache-2.0) liegt unverändert unter `vendor/pdfjs/`.
+- Code, Lerninhalte, Pixel-Grafik und Soundtrack wurden für diese Plattform erstellt. Externe Quellen sind in den Modulen verlinkt.

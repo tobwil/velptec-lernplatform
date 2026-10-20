@@ -57,11 +57,11 @@ export function leaderboardView(main) {
     const val = (c) => (metric === 'xp' ? c.xp : metric === 'sprint' ? c.sprintBest : c.modules * 1000 + c.lessons);
     const label = (c) => (metric === 'xp' ? `${c.xp} XP` : metric === 'sprint' ? `${c.sprintBest} Pkt.` : `${c.modules} Module · ${c.lessons} Lekt.`);
     all.sort((a, b) => val(b) - val(a));
-    clear(listEl).append(all.length ? all.map((c, i) => h(`div.lb-row${c.id === store.state.active ? '.me' : ''}`,
+    clear(listEl).append(...(all.length ? all.map((c, i) => h(`div.lb-row${c.id === store.state.active ? '.me' : ''}`,
       h('div.lb-rank', i < 3 ? ['🥇', '🥈', '🥉'][i] : `#${i + 1}`),
       pixelAvatar(c.name, 40),
       h('div', h('strong', c.name), h('div.small.muted', `Level ${c.level} · ${levelInfo(c.xp).title} · 🏅 ${c.badges}${c.id === store.state.active ? ' · das bist du' : ''}`)),
-      h('strong', label(c)))) : h('p.empty', 'Noch keine Einträge.'));
+      h('strong', label(c)))) : [h('p.empty', 'Noch keine Einträge.')]));
   };
 
   const tabs = h('div.tabs', [['xp', 'Gesamt-XP'], ['sprint', 'Wissens-Sprint'], ['modules', 'Lernfortschritt']].map(([k, l], i) => {

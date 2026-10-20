@@ -186,7 +186,7 @@ export function renderExercise(container, mod, ex) {
   container.append(
     h('div.card',
       h('div.row', h('span.chip.chip-ok', 'ÜBUNG'), h('span.chip', mod.title)),
-      h('h2', { style: { marginTop: '10px' } }, ex.title),
+      h('h1', { style: { marginTop: '10px', fontSize: '1.6rem' } }, ex.title),
       ex.scenario ? h('div.block-praxis', { style: { margin: '18px 0' } }, h('span.praxis-tag', 'SZENARIO'), mdEl(ex.scenario)) : null,
       h('h4', 'Deine Aufgabe'), mdEl(ex.task),
       ex.deliverable ? h('p.small', h('strong', 'Ergebnis: '), ex.deliverable) : null,
