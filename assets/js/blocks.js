@@ -78,7 +78,7 @@ const R = {
   timeline: (b) => h('div.timeline', b.items.map((it) => h('div.tl-item', h('div.tl-date', it.date), h('strong', it.title), it.md ? mdEl(it.md) : null))),
 
   interactive: (b, ctx) => {
-    const host = h('div.card.widget-host', h('div.empty', '⏳ Interaktives Element wird geladen …'));
+    const host = h('div.widget-host', h('div.empty', '⏳ Interaktives Element wird geladen …'));
     import('./widgets/index.js').then(async ({ widgets }) => {
       const loader = widgets[b.widget];
       if (!loader) throw new Error('Widget fehlt: ' + b.widget);

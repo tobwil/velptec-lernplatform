@@ -102,7 +102,7 @@ try {
   await page.click('text=Lektion erzeugen');
   await page.waitForSelector('text=Zur neuen Lektion');
   await page.click('text=Zur neuen Lektion');
-  await page.waitForSelector('h1');
+  await page.waitForSelector('.tabs');
   ok((await page.textContent('h1')).toLowerCase().includes('richtlinie'), 'Upload erzeugt eigene Lektion (offline)');
   await page.locator('a[href*="/lektion/"]').first().click();
   await page.waitForSelector('article h1');
