@@ -71,14 +71,17 @@ export function dashboard(main) {
     dailyCard(p),
 
     h('section.section',
-      h('div.section-title', h('h2', { style: { margin: 0 } }, 'Kursmodule'), h('span.spacer'), h('span.chip.chip-new', '★ = neu, über das Handout hinaus')),
-      h('div.grid.grid-3', course.modules.map((m, i) => moduleCard(m, i, p)))),
+      h('div.section-title', h('h2', { style: { margin: 0 } }, '📘 Kapitel des Theorieskripts'), h('span.spacer'), h('span.chip.chip-primary', `velpTEC ${COURSE.skript.code}`)),
+      h('div.grid.grid-3', course.modules.filter((m) => m.chapter).map((m, i) => moduleCard(m, i, p)))),
+    h('section.section',
+      h('div.section-title', h('h2', { style: { margin: 0 } }, '★ Plus-Module'), h('span.spacer'), h('span.chip.chip-new', 'Vertiefung über das Skript hinaus')),
+      h('div.grid.grid-3', course.modules.filter((m) => m.plus).map((m, i) => moduleCard(m, i, p)))),
 
     h('section.section.grid.grid-2',
       h('div.card',
-        h('h3', '📄 Original-Kursunterlage'),
-        h('p.muted', `Alle Lektionen verweisen auf das Handout „${COURSE.handout.title}“ – mit Kapitel und Seitenzahl. Wo das Handout veraltet ist, findest du einen markierten Aktualisierungshinweis.`),
-        h('div.row', h('a.btn', { href: '#/unterlagen' }, 'Handout ansehen'), h('a.btn.btn-ghost', { href: COURSE.handout.file, download: '' }, '⬇ PDF herunterladen'))),
+        h('h3', '📘 Offizielles Theorieskript'),
+        h('p.muted', `Die Plattform folgt dem velpTEC-Theorieskript „KI-Management“ (${COURSE.skript.code}): jedes Kapitel ein Modul, jeder Abschnitt eine Lektion – mit Seitenangaben. Wo sich seit dem Skript etwas geändert hat, findest du einen markierten Aktualisierungshinweis.`),
+        h('div.row', h('a.btn', { href: '#/unterlagen' }, 'Skript-Übersicht'), h('a.btn.btn-ghost', { href: COURSE.skript.driveUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Original öffnen ↗'))),
       h('div.card',
         h('h3', '🛠️ Eigene Lektionen erzeugen'),
         h('p.muted', 'Lade ein Übungsdokument (PDF, Word, PowerPoint, Text) hoch – die Plattform erzeugt daraus eine neue Lektion mit Lernkarten, Quiz und Transferaufgabe. Offline per Textanalyse oder optional mit KI.'),
@@ -98,7 +101,7 @@ function moduleCard(m, i, p) {
   return h(`a.card.module-card${m.isNew ? '.is-new' : ''}`, { href: `#/modul/${m.id}` },
     h('div.mc-head',
       h('div.mc-icon', pixelIcon(m.icon, 30)),
-      h('div', h('div.mc-num', `MODUL ${String(m.order ?? i + 1).padStart(2, '0')}${m.isNew ? ' ★ NEU' : ''}`), h('h3', m.title))),
+      h('div', h('div.mc-num', m.chapter ? `KAPITEL ${m.chapter}` : m.plus ? '★ PLUS-MODUL' : `MODUL ${i + 1}`), h('h3', m.title))),
     h('p', m.subtitle),
     h('div.mc-foot', h('span', `⏱ ${m.minutes} Min.`), h('div.progress', h('i', { style: { width: pr.pct + '%' } })), h('span', pr.complete ? '✅' : `${pr.pct}%`)));
 }

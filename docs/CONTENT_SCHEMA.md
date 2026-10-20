@@ -17,15 +17,17 @@ export default {
   title: 'Grundlagen der KI',
   subtitle: 'Begriffe, Disziplinen, Daten als Rohstoff',
   icon: 'brain',                   // Pixel-Icon: brain|chart|target|gear|shield|people|gauge|book|spark|flow|box|leaf
-  isNew: false,                    // true = Erweiterung über das Handout hinaus
+  chapter: 1,                      // Kapitel des Theorieskripts K7.0069 (k1–k8) – ODER plus: true für Plus-Module
+  isNew: false,                    // true = Inhalte über das Skript hinaus (bei Plus-Modulen)
   minutes: 60,                     // geschätzte Lernzeit gesamt
-  handout: [{ section: '2', title: 'Grundlagen', page: 1 }],  // Bezug zum Original-Handout (PDF-Seite)
+  skript: [{ chapter: '1.1', title: 'Was ist Künstliche Intelligenz?', page: 4 }],  // Bezüge zum Theorieskript (gedruckte Seitenzahl)
   objectives: ['Du kannst …', '…'],
   lessons: [
     {
       id: 'm01-l1',
       title: 'Was ist Künstliche Intelligenz?',
       minutes: 15,
+      skript: { chapter: '1.1', page: 4 },   // Pflicht in Kapitelmodulen; deepening: true für Vertiefungslektionen
       blocks: [ /* siehe Blocktypen */ ]
     }
   ],
@@ -43,8 +45,8 @@ export default {
 | `text` | `md` | Fließtext |
 | `callout` | `variant`: `info`\|`merksatz`\|`warn`\|`tipp`, `title`, `md` | Hervorhebung |
 | `praxis` | `title`, `company` (fiktives Beispielunternehmen o. reales mit Quelle), `scenario` (md), `steps` (string[]), `takeaway` (md), optional `source` ({title,url}) | **Praxisbezug** – Pflicht in jeder Lektion |
-| `handout` | `section`, `page`, `quote` (wörtlich aus dem Handout), optional `md` (Einordnung) | Verweis aufs Original-Dokument |
-| `update` | `title`, `md`, `sources` ([{title,url}]) | „Aktualisierung zum Handout" – wenn das Handout veraltet/ergänzungsbedürftig ist |
+| `skript` | `chapter` (z. B. `'1.1'`), `page` (gedruckte Seite), `md` (Kernaussagen des Abschnitts in eigenen Worten), optional `quote` (kurzes wörtliches Zitat, max. 320 Zeichen) | Verweis aufs offizielle Theorieskript K7.0069 |
+| `update` | `title`, `md`, `sources` ([{title,url}]) | „Aktualisierung zum Skript" – wenn das Skript veraltet/ergänzungsbedürftig ist |
 | `table` | `head` (string[]), `rows` (string[][]), optional `caption` | Tabelle (Zellen: Inline-Markdown) |
 | `flipcards` | `cards`: [{`front`, `back`}] | Lernkarten zum Umdrehen |
 | `steps` | `items`: [{`title`, `md`}] | Animierte Schrittfolge (Prozess) |
@@ -88,7 +90,7 @@ export default {
 { type: 'match',  q: 'Ordne zu', pairs: [['Begriff','Definition'], …], explain: '…' }   // 3–5 Paare
 { type: 'cloze',  q: 'Lückentext', text: 'Garbage in, {{garbage}} out.', explain: '…' } // {{lösung|alternative}}
 ```
-Jede Frage braucht `explain` (Lernerklärung, gern mit Handout-/Quellenbezug).
+Jede Frage braucht `explain` (Lernerklärung, gern mit Skript-/Quellenbezug).
 
 ## Übungsaufgaben (`exercises[]`)
 

@@ -21,8 +21,13 @@ export function renderBlock(b, ctx = {}) {
   }
 }
 
-export function handoutLink(page, label) {
-  return h('a', { href: `${COURSE.handout.file}#page=${page}`, target: '_blank', rel: 'noopener' }, label || `Handout S. ${page} öffnen ↗`);
+/** Link zum Original-Theorieskript (liegt nicht im Repository; Zugang nur für Berechtigte). */
+export function skriptLink(label = 'Original öffnen ↗') {
+  return h('a', { href: COURSE.skript.driveUrl, target: '_blank', rel: 'noopener noreferrer', title: 'Zugang nur für Teilnehmende und Dozierende' }, label);
+}
+
+export function skriptChip(chapter, page) {
+  return h('span.chip.chip-primary', `📘 Skript Kap. ${chapter} · S. ${page}`);
 }
 
 const R = {
@@ -41,13 +46,13 @@ const R = {
     b.takeaway ? h('div.notice', { style: { marginTop: '10px' } }, h('strong', 'Take-away: '), h('span', { html: mdInline(b.takeaway) })) : null,
     b.source ? h('p.small.muted', { style: { marginTop: '8px', marginBottom: 0 } }, 'Quelle: ', h('a', { href: b.source.url, target: '_blank', rel: 'noopener noreferrer' }, b.source.title || b.source.url)) : null),
 
-  handout: (b) => h('div.block-handout',
-    h('div.ho-head', '📄 Original-Handout „KI-Management kompakt"', h('span.chip.chip-primary', `Kap. ${b.section} · S. ${b.page}`), handoutLink(b.page)),
-    h('q', b.quote),
-    b.md ? mdEl(b.md) : null),
+  skript: (b) => h('div.block-skript',
+    h('div.ho-head', `📘 Theorieskript „${COURSE.skript.title.split(' – ')[0]}“ (${COURSE.skript.publisher} ${COURSE.skript.code})`, h('span.chip.chip-primary', `Kap. ${b.chapter} · S. ${b.page}`), skriptLink()),
+    b.quote ? h('q', b.quote) : null,
+    mdEl(b.md)),
 
   update: (b) => h('div.block-update',
-    h('h4', '🔄 ', b.title || 'Aktualisierung zum Handout'),
+    h('h4', '🔄 ', b.title || 'Aktualisierung zum Skript'),
     mdEl(b.md),
     b.sources?.length ? h('p.small', { style: { margin: '8px 0 0' } }, 'Belege: ', b.sources.map((s, i) => [i ? ' · ' : '', h('a', { href: s.url, target: '_blank', rel: 'noopener noreferrer' }, s.title)])) : null),
 

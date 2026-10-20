@@ -1,4 +1,4 @@
-// Widget: Vorgehensmodell in 7 Phasen als animierte Pipeline (Handout §6.1).
+// Widget: Vorgehensmodell in 7 Phasen als animierte Pipeline (Skript Kap. 4.1).
 import { h, pixelIcon } from '../ui.js';
 import { safeCtx, widgetHead, setupRoot, timers, rovingKeys, prefersReducedMotion, uid, fill } from './_shared.js';
 

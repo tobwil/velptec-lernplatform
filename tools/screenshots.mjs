@@ -16,8 +16,8 @@ function profile(id, name, xp, extra = {}) {
 }
 const now = Date.now();
 const me = profile('p-alex', 'Alex', 1380, {
-  lessons: Object.fromEntries(['m01-l1', 'm01-l2', 'm01-l3', 'm01-l4', 'm02-l1', 'm02-l2', 'm02-l3', 'm02-l4', 'm03-l1', 'm03-l2', 'm10-l1'].map((k) => [k, now])),
-  quiz: { m01: { best: 12, total: 12, last: 12, attempts: 1, t: now }, m02: { best: 10, total: 12, last: 10, attempts: 2, t: now } },
+  lessons: Object.fromEntries(['k1-l1', 'k1-l2', 'k1-l3', 'k1-l4', 'k1-l5', 'k1-l6', 'k2-l1', 'k2-l2', 'k2-l3', 'k3-l1', 'p2-l1'].map((k) => [k, now])),
+  quiz: { k1: { best: 12, total: 12, last: 12, attempts: 1, t: now }, k2: { best: 10, total: 12, last: 10, attempts: 2, t: now } },
   badges: { start: now, reader: now, ace: now, module1: now, streak3: now, explorer: now, cinema: now, sprinter: now },
   widgets: { a: 1, b: 1, c: 1, d: 1, e: 1 },
   days: [day(0), day(1), day(2), day(3), day(4)],
@@ -72,23 +72,23 @@ let p = await page();
 await go(p, '#/', 3800);
 await shot(p, '01-dashboard');
 
-const m10 = await mod('m10');
+const m10 = await mod('p2');
 const builderLesson = m10.lessons.find((l) => l.blocks.some((b) => b.widget === 'workflow-builder'));
-await go(p, `#/modul/m10/lektion/${builderLesson.id}`, 1500);
+await go(p, `#/modul/p2/lektion/${builderLesson.id}`, 1500);
 await p.locator('.widget-host').first().scrollIntoViewIfNeeded();
 await p.evaluate(() => window.scrollBy(0, -90));
 await p.waitForTimeout(500);
 await shot(p, '03-widget-n8n');
 
-const m05 = await mod('m05');
-await go(p, `#/modul/m05/lektion/${m05.lessons[0].id}`, 800);
+const m05 = await mod('k5');
+await go(p, `#/modul/k5/lektion/${m05.lessons[0].id}`, 800);
 const praxis = p.locator('.block-praxis').first();
 await praxis.scrollIntoViewIfNeeded();
 await p.evaluate(() => window.scrollBy(0, -120));
 await p.waitForTimeout(300);
-await shot(p, '04-praxis-handout');
+await shot(p, '04-praxis-skript');
 
-await go(p, '#/modul/m03/quiz', 600);
+await go(p, '#/modul/k2/quiz', 600);
 await p.locator('.opt').first().click().catch(() => {});
 await p.locator('.question .q-actions .btn-primary').click().catch(() => {});
 await p.waitForTimeout(400);
@@ -125,8 +125,8 @@ await shot(p, '02-dashboard-dunkel');
 
 // Übung mit (simuliertem) KI-Feedback
 p = await page({ ai: true });
-const m03 = await mod('m03');
-await go(p, `#/modul/m03/uebung/${m03.exercises[0].id}`, 400);
+const m03 = await mod('k2');
+await go(p, `#/modul/k2/uebung/${m03.exercises[0].id}`, 400);
 await p.fill('textarea', 'Use-Case-Portfolio Autohaus Brenner:\n1. E-Mail-Klassifikation im Service – Nutzen 4, Machbarkeit 5 → Quick Win\n2. Angebotsassistent für Verkäufer – Nutzen 4, Machbarkeit 3\n3. Predictive Maintenance Werkstatt – Nutzen 3, Machbarkeit 2\nRisiken: Datenschutz bei Kundendaten (DSGVO), Akzeptanz im Team.\nNächster Schritt: Pilot E-Mail-Klassifikation für 8 Wochen.');
 await p.click('text=✅ Offline-Check');
 await p.click('text=KI-Feedback holen');

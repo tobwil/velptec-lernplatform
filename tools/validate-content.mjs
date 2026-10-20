@@ -4,8 +4,9 @@
 import { readdirSync } from 'node:fs';
 import { resolve, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { COURSE } from '../content/course.js';
 
-const BLOCKS = ['text', 'callout', 'praxis', 'handout', 'update', 'table', 'flipcards', 'steps', 'timeline', 'interactive', 'video', 'youtube', 'quickcheck', 'links'];
+const BLOCKS = ['text', 'callout', 'praxis', 'skript', 'update', 'table', 'flipcards', 'steps', 'timeline', 'interactive', 'video', 'youtube', 'quickcheck', 'links'];
 const WIDGETS = ['neural-net', 'data-quality', 'usecase-matrix', 'roi-calculator', 'process-steps', 'ai-act-classifier', 'risk-matrix', 'confusion-matrix', 'prompt-builder', 'rag-pipeline', 'agent-loop', 'workflow-builder', 'token-calculator', 'adkar-check'];
 const SCENES = ['intro', 'ki', 'daten', 'strategie', 'prozess', 'risiko', 'n8n', 'rag', 'change', 'kpi', 'outro'];
 const ICONS = ['brain', 'chart', 'target', 'gear', 'shield', 'people', 'gauge', 'book', 'spark', 'flow', 'box', 'leaf'];
@@ -51,7 +52,17 @@ export function validateModule(m, file = m?.id) {
   need(ICONS.includes(m.icon), `icon ungültig (${m.icon})`);
   need(typeof m.minutes === 'number', 'minutes fehlt');
   need(Array.isArray(m.objectives) && m.objectives.length, 'objectives fehlt');
-  need(Array.isArray(m.handout), 'handout muss Array sein (ggf. leer)');
+  need(!/handout/i.test(JSON.stringify(m)), 'enthält noch Verweise auf das Handout (entfernt – bitte auf das Theorieskript umstellen)');
+  const chap = COURSE.skript.chapters.find((c) => c.module === m.id);
+  if (chap) {
+    need(String(m.chapter) === chap.chapter, `chapter muss ${chap.chapter} sein`);
+    need(Array.isArray(m.skript) && m.skript.length, 'skript (Verweise aufs Theorieskript) fehlt');
+    const covered = new Set((m.lessons || []).map((l) => l.skript?.chapter));
+    chap.sections.forEach((sec) => need(covered.has(sec.chapter), `Skript-Abschnitt ${sec.chapter} „${sec.title}“ hat keine Lektion`));
+    (m.lessons || []).forEach((l) => need(l.skript?.chapter && Number.isInteger(l.skript?.page), `${l.id}: skript {chapter, page} fehlt`));
+  } else {
+    need(m.plus === true, 'Modul ist weder Skriptkapitel (k1–k8) noch Plus-Modul (plus: true)');
+  }
   need(Array.isArray(m.lessons) && m.lessons.length >= 1, 'lessons fehlt');
   const ids = new Set();
   (m.lessons || []).forEach((l, li) => {
@@ -69,7 +80,7 @@ export function validateModule(m, file = m?.id) {
       if (b.type === 'youtube') need(/^[\w-]{11}$/.test(b.id || ''), `${bw}: youtube id ungültig`);
       if (b.type === 'quickcheck') validateQuestion({ ...b, type: b.qtype }, bw, err);
       if (b.type === 'table') need(Array.isArray(b.head) && Array.isArray(b.rows) && b.rows.every((r) => r.length === b.head.length), `${bw}: Tabellenzeilen passen nicht zum Kopf`);
-      if (b.type === 'handout') need(b.quote && b.page, `${bw}: quote/page fehlt`);
+      if (b.type === 'skript') need(b.chapter && Number.isInteger(b.page) && b.md && (!b.quote || b.quote.length <= 320), `${bw}: chapter/page/md fehlt oder quote > 320 Zeichen`);
       if (b.type === 'links') need(Array.isArray(b.items) && b.items.every((i) => /^https:\/\//.test(i.url)), `${bw}: items/url ungültig`);
       if (b.type === 'update') need(Array.isArray(b.sources) && b.sources.length, `${bw}: sources fehlt`);
     });

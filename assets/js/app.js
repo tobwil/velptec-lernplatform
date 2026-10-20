@@ -50,25 +50,29 @@ function navLink(href, icon, label, extra) {
 
 function renderSidebar() {
   const p = store.profile;
-  const mods = course.modules.map((m, i) => {
+  const modLink = (m) => {
     const pr = p ? moduleProgress(m, p) : { pct: 0, complete: false };
-    const a = navLink(`#/modul/${m.id}`, m.icon, `${m.order ?? i + 1}. ${m.title}`, h('span.nav-prog', pr.complete ? '✓' : `${pr.pct}%`));
+    const a = navLink(`#/modul/${m.id}`, m.icon, m.chapter ? `${m.chapter}. ${m.title}` : m.title, h('span.nav-prog', pr.complete ? '✓' : `${pr.pct}%`));
     if (pr.complete) a.classList.add('done');
     return a;
-  });
+  };
+  const mods = course.modules.filter((m) => m.chapter).map(modLink);
+  const plus = course.modules.filter((m) => m.plus).map(modLink);
   const customs = course.custom.map((m) => navLink(`#/modul/${m.id}`, 'upload', m.title));
   clear(sideEl).append(
     h('a.brand', { href: '#/' }, brandLogo(), h('div', h('div.brand-title', 'VELPTEC'), h('div.brand-sub', 'Weiterbildung KI-Management'))),
     navLink('#/', 'spark', 'Übersicht'),
-    h('div.nav-sec', 'Kursmodule'),
+    h('div.nav-sec', 'Kapitel (Theorieskript)'),
     ...mods,
+    h('div.nav-sec', 'Plus-Module'),
+    ...plus,
     h('div.nav-sec', 'Üben & Spielen'),
     navLink('#/sprint', 'gauge', 'Wissens-Sprint'),
     navLink('#/rangliste', 'trophy', 'Rangliste'),
     navLink('#/profil', p ? pixelAvatar(p.name, 20) : 'people', 'Mein Fortschritt'),
     h('div.nav-sec', 'Material'),
     navLink('#/video', 'chart', 'Pixel-Erklärfilm'),
-    navLink('#/unterlagen', 'book', 'Kursunterlagen (Handout)'),
+    navLink('#/unterlagen', 'book', 'Theorieskript & Unterlagen'),
     navLink('#/glossar', 'brain', 'Glossar'),
     navLink('#/quellen', 'target', 'Quellen & Links'),
     h('div.nav-sec', 'Eigene Lektionen'),
@@ -172,7 +176,7 @@ async function boot() {
     h('span.pixel.small.hide-sm', { style: { fontSize: '.6rem', color: 'var(--muted)' } }, `${COURSE.provider.toUpperCase()} · ${COURSE.title.toUpperCase()}`),
     h('span.spacer'), topStreak, topXp, themeBtn);
   mainEl = h('main.content', { id: 'main' });
-  clear(appEl).append(sideEl, h('div.main', top, mainEl, h('footer.footer', 'Lernplattform zur Weiterbildung KI-Management · Inhalte auf Basis des Handouts „KI-Management kompakt“ (Zeitlmann & Wilhelm, KIsruptiv GbR), erweitert um aktuelle Themen · Fortschritt bleibt lokal in deinem Browser · ', h('a', { href: '#/einstellungen' }, 'Datenschutz & Einstellungen'))));
+  clear(appEl).append(sideEl, h('div.main', top, mainEl, h('footer.footer', `Lernplattform zur Weiterbildung KI-Management · Aufbau nach dem velpTEC-Theorieskript „KI-Management“ (${COURSE.skript.code}), erweitert um Praxis und aktuelle Themen · Fortschritt bleibt lokal in deinem Browser · `, h('a', { href: '#/einstellungen' }, 'Datenschutz & Einstellungen'))));
   appEl.addEventListener('click', (e) => { if (e.target === appEl) appEl.classList.remove('nav-open'); });
 
   clear(mainEl).append(h('div.empty', '⏳ Kurs wird geladen …'));

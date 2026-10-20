@@ -1,4 +1,4 @@
-// Widget: 5×5-Risikomatrix für KI-Risiken mit Gegenmaßnahmen (Handout §7).
+// Widget: 5×5-Risikomatrix für KI-Risiken mit Gegenmaßnahmen (Skript Kap. 4.4).
 import { h } from '../ui.js';
 import { safeCtx, widgetHead, setupRoot, uid, fill } from './_shared.js';
 

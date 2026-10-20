@@ -41,7 +41,7 @@ try {
   await shot(page, '01-dashboard-hell');
 
   // Modul + Lektionen
-  await page.goto(url + '/#/modul/m01');
+  await page.goto(url + '/#/modul/k1');
   await page.waitForSelector('h1');
   ok((await page.textContent('h1')).length > 3, 'Modulseite rendert');
   await shot(page, '02-modul');
@@ -55,7 +55,7 @@ try {
     }
     ok(lessons.length > 0, `${id}: ${lessons.length} Lektionen gerendert`);
   }
-  await page.goto(`${url}/#/modul/m10/lektion/${await page.evaluate(async () => (await import('/content/modules/m10.js')).default.lessons[0].id)}`);
+  await page.goto(`${url}/#/modul/p2/lektion/${await page.evaluate(async () => (await import('/content/modules/p2.js')).default.lessons[0].id)}`);
   await page.waitForTimeout(1200);
   await shot(page, '03-lektion');
   await page.click('.lesson-nav .btn-accent');
@@ -64,7 +64,7 @@ try {
   ok(Object.values(xp)[0].xp > 0, 'Lektion abschließen vergibt XP');
 
   // Quiz: alle Fragen beantworten (erste Option / irgendwas)
-  await page.goto(url + '/#/modul/m01/quiz');
+  await page.goto(url + '/#/modul/k1/quiz');
   await page.waitForSelector('.quiz-card');
   for (let i = 0; i < 20; i++) {
     if (await page.locator('.quiz-result').count()) break;
@@ -81,8 +81,8 @@ try {
   await shot(page, '04-quiz');
 
   // Übung mit Offline-Check
-  const exId = await page.evaluate(async () => (await import('/content/modules/m03.js')).default.exercises[0].id);
-  await page.goto(`${url}/#/modul/m03/uebung/${exId}`);
+  const exId = await page.evaluate(async () => (await import('/content/modules/k2.js')).default.exercises[0].id);
+  await page.goto(`${url}/#/modul/k2/uebung/${exId}`);
   await page.waitForSelector('textarea');
   await page.fill('textarea', 'Unser Ziel ist ein Pilot zur E-Mail-Klassifikation im Kundenservice. KPI: Durchlaufzeit und Fehlerquote. Risiko: Datenschutz und DSGVO, daher Governance und Freigabe durch den Datenschutzbeauftragten. Nutzen hoch, Machbarkeit mittel, Roadmap in drei Phasen mit Meilensteinen. Budget und ROI werden nach dem Pilot bewertet.');
   await page.click('text=Offline-Check');
@@ -137,7 +137,7 @@ try {
       s.ai = { ...(s.ai || {}), enabled: true, provider: pv, keys: { anthropic: 'sk-ant-test', openai: 'sk-test', gemini: 'g-test' } };
       localStorage.setItem('vlp:settings:v1', JSON.stringify(s));
     }, provider);
-    await page.goto(`${url}/#/modul/m03/uebung/${exId}`);
+    await page.goto(`${url}/#/modul/k2/uebung/${exId}`);
     await page.reload();
     await page.waitForSelector('text=KI-Feedback holen');
     await page.click('text=KI-Feedback holen');
@@ -162,10 +162,10 @@ try {
   await dark.waitForSelector('.module-card');
   await dark.waitForTimeout(500);
   await shot(dark, '09-dashboard-dunkel');
-  await dark.goto(url + '/#/modul/m05');
+  await dark.goto(url + '/#/modul/k5');
   await dark.waitForTimeout(300);
-  const firstLesson = await dark.evaluate(async () => (await import('/content/modules/m05.js')).default.lessons[0].id);
-  await dark.goto(`${url}/#/modul/m05/lektion/${firstLesson}`);
+  const firstLesson = await dark.evaluate(async () => (await import('/content/modules/k5.js')).default.lessons[0].id);
+  await dark.goto(`${url}/#/modul/k5/lektion/${firstLesson}`);
   await dark.waitForTimeout(1000);
   await shot(dark, '10-lektion-dunkel');
 

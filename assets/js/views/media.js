@@ -1,4 +1,4 @@
-// Pixel-Film, Kursunterlagen (Original-Handout), Glossar, Quellenverzeichnis.
+// Pixel-Film, Theorieskript-Übersicht, Glossar, Quellenverzeichnis.
 import { h, clear, toast, mdEl } from '../ui.js';
 import { store } from '../store.js';
 import { course, award } from '../gamification.js';
@@ -43,38 +43,41 @@ export function videoView(main) {
       h('div.card',
         h('h3', '🧭 Kapitel & Lernbezug'),
         h('ul.small', { style: { paddingLeft: '1.2em', margin: 0 } },
-          h('li', 'Was ist KI? → Modul 1'), h('li', 'Daten als Rohstoff → Modul 1'), h('li', 'KI-Strategie → Modul 3'), h('li', 'Vom PoC zum Betrieb → Modul 4'),
-          h('li', 'EU AI Act & Governance → Modul 5'), h('li', 'Automatisieren mit n8n → Modul 10'), h('li', 'RAG & Agenten → Modul 9/10'), h('li', 'Menschen mitnehmen → Modul 6'), h('li', 'Wirkung messen → Modul 7')))),
+          h('li', 'Was ist KI? → Kapitel 1'), h('li', 'Daten als Rohstoff → Kapitel 3'), h('li', 'KI-Strategie → Kapitel 2 und 7'), h('li', 'Vom PoC zum Betrieb → Kapitel 4 und 6'),
+          h('li', 'EU AI Act & Governance → Kapitel 5'), h('li', 'Automatisieren mit n8n → Plus-Modul n8n'), h('li', 'RAG & Agenten → Kapitel 8, Plus-Module'), h('li', 'Menschen mitnehmen → Kapitel 4.5 und 7.4'), h('li', 'Wirkung messen → Kapitel 2.4 und 6.2')))),
   );
 }
 
 export function docsView(main) {
-  const hd = COURSE.handout;
-  const frame = h('iframe.pdf-frame', { src: hd.file, title: hd.title, loading: 'lazy' });
+  const sk = COURSE.skript;
+  const lessonsFor = (chapter) => course.modules.flatMap((m) => m.lessons.filter((l) => l.skript?.chapter === chapter).map((l) => ({ m, l })));
+  const p = store.profile;
   main.classList.add('wide');
   main.append(
-    h('h1', '📄 Kursunterlagen'),
-    h('p.muted', 'Das Original-Handout zur Weiterbildung ist hier eingebunden. Jede Lektion verweist mit Kapitel und Seite darauf; Aktualisierungen (z. B. EU AI Act 2026) sind in den Lektionen gekennzeichnet.'),
+    h('h1', '📘 Theorieskript & Kursunterlagen'),
+    h('p.muted', 'Die Lernplattform folgt dem offiziellen velpTEC-Theorieskript: Jedes Kapitel ist ein Modul, jeder Abschnitt hat mindestens eine Lektion. Die Lektionen bereiten den Skriptinhalt interaktiv auf, ergänzen Praxisfälle und aktuelle Entwicklungen und nennen jeweils die Skriptseite.'),
     h('div.card',
       h('div.row',
-        h('div', { style: { flex: 1 } }, h('h3', { style: { margin: 0 } }, hd.title), h('div.small.muted', `${hd.authors} · ${hd.pages} Seiten · fasst das 230-seitige Skript „KI-Management“ zusammen`)),
-        h('a.btn.btn-primary', { href: hd.file, download: '' }, '⬇ PDF herunterladen'),
-        h('a.btn', { href: hd.file, target: '_blank', rel: 'noopener' }, 'In neuem Tab ↗'),
-        h('a.btn.btn-ghost', { href: hd.driveUrl, target: '_blank', rel: 'noopener noreferrer', title: 'Nur für berechtigte Personen zugänglich' }, 'Original in Google Drive ↗'))),
-    h('section.section.grid', { style: { gridTemplateColumns: 'minmax(0, 2fr) minmax(240px, 1fr)' } },
-      frame,
-      h('div.card',
-        h('h3', 'Kapitel → Lernmodul'),
-        h('div.stack', hd.sections.map((s) => {
-          const m = s.module && course.modules.find((x) => x.id === s.module);
-          return h('div.small',
-            h('a', { href: `${hd.file}#page=${s.page}`, target: '_blank', rel: 'noopener' }, `${s.section}. ${s.title}`), h('span.muted', ` · S. ${s.page}`),
-            m ? h('div', '→ ', h('a', { href: `#/modul/${m.id}` }, m.title)) : null);
-        })),
-        h('h4', 'Neue Module (nicht im Handout)'),
-        h('div.stack', course.modules.filter((m) => m.isNew).map((m) => h('a.small', { href: `#/modul/${m.id}` }, '★ ', m.title))))),
+        h('div', { style: { flex: 1, minWidth: '240px' } }, h('h3', { style: { margin: 0 } }, sk.title), h('div.small.muted', `${sk.publisher} · ${sk.code} · ${sk.pages} Seiten · 8 Kapitel, 38 Abschnitte`)),
+        h('a.btn.btn-primary', { href: sk.driveUrl, target: '_blank', rel: 'noopener noreferrer' }, 'Original-Skript öffnen ↗')),
+      h('p.small.muted', { style: { margin: '10px 0 0' } }, '🔒 Das Skript ist Kursmaterial von velpTEC und wird nicht auf dieser Plattform veröffentlicht. Der Link funktioniert nur für berechtigte Teilnehmende und Dozierende; sonst erhältst du das Skript über deine Lehrkraft bzw. die velpTEC-Lernumgebung.')),
+    h('section.section',
+      h('h2', 'Inhaltsverzeichnis → Lektionen'),
+      h('div.stack', sk.chapters.map((c) => {
+        const m = course.modules.find((x) => x.id === c.module);
+        return h('div.card',
+          h('div.row', h('h3', { style: { margin: 0, flex: 1 } }, `${c.chapter} ${c.title}`), h('span.chip', `ab S. ${c.page}`), m ? h('a.btn.btn-sm', { href: `#/modul/${m.id}` }, 'Zum Kapitel →') : null),
+          h('div.tbl-wrap', { style: { marginTop: '10px' } }, h('table.tbl',
+            h('thead', h('tr', h('th', 'Abschnitt'), h('th', 'Skriptseite'), h('th', 'Lektion(en) auf der Plattform'))),
+            h('tbody', c.sections.map((s) => h('tr',
+              h('td', `${s.chapter} ${s.title}`),
+              h('td', `S. ${s.page}`),
+              h('td', lessonsFor(s.chapter).map(({ m: mm, l }, i) => [i ? h('br') : null, p?.lessons[l.id] ? '✅ ' : '', h('a', { href: `#/modul/${mm.id}/lektion/${l.id}` }, l.title)]))))))));
+      }))),
+    h('section.section',
+      h('h2', '★ Plus-Module (über das Skript hinaus)'),
+      h('div.grid.grid-2', course.modules.filter((m) => m.plus).map((m) => h('a.card.card-flat', { href: `#/modul/${m.id}`, style: { textDecoration: 'none', color: 'inherit' } }, h('strong', m.title), h('div.small.muted', m.subtitle))))),
   );
-  frame.addEventListener('error', () => toast('PDF konnte nicht eingebettet werden – nutze den Download.', { icon: '📄' }));
 }
 
 export function glossaryView(main) {

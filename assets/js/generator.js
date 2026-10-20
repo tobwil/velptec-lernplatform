@@ -152,7 +152,6 @@ export function generateOffline(text, { title, fileName }) {
     title: docTitle,
     subtitle: `Eigene Lektion aus „${fileName}“ · offline generiert`,
     minutes: lessons.reduce((a, l) => a + l.minutes, 0) + 10,
-    handout: [],
     objectives: [
       `Du kannst die Kernaussagen von „${docTitle}“ in eigenen Worten wiedergeben.`,
       kw.length ? `Du kennst zentrale Begriffe wie ${kw.slice(0, 3).map((k) => `„${k}“`).join(', ')}.` : 'Du kennst die zentralen Begriffe des Dokuments.',
@@ -332,7 +331,6 @@ export function sanitizeModule(d, { fileName, title, generator, truncated }) {
     title: title || d.title || fileName,
     subtitle: (d.subtitle || `Eigene Lektion aus „${fileName}“`) + ` · ${generator}${truncated ? ' · Dokument gekürzt' : ''}`,
     minutes: lessons.reduce((a, l) => a + (l.minutes || 10), 0) + 10,
-    handout: [],
     objectives: (Array.isArray(d.objectives) ? d.objectives : []).filter(isStr),
     lessons,
     quiz: (Array.isArray(d.quiz) ? d.quiz : []).filter(okQuestion).map((q) => ({ ...q, explain: q.explain || '' })),

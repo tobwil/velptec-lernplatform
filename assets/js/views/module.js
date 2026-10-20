@@ -1,7 +1,8 @@
 import { h, mdEl, pixelIcon, clear, toast, modal } from '../ui.js';
 import { store, idb } from '../store.js';
 import { getModule, course, moduleProgress, markLesson, recordQuiz, award } from '../gamification.js';
-import { renderBlock, renderSources, lessonPlainText, handoutLink } from '../blocks.js';
+import { renderBlock, renderSources, lessonPlainText, skriptLink, skriptChip } from '../blocks.js';
+import { COURSE } from '../../../content/course.js';
 import { runQuiz } from '../quiz.js';
 import { renderExercise } from '../exercise.js';
 import { setCoachContext } from '../coach.js';
@@ -16,6 +17,7 @@ function crumbs(...items) {
 }
 
 const modIndex = (m) => course.modules.indexOf(m);
+export const moduleLabel = (m) => (m.chapter ? `Kapitel ${m.chapter}` : m.plus ? 'Plus-Modul' : m.custom ? 'Eigene Lektion' : 'Modul');
 
 export function moduleView(main, id) {
   const m = getModule(id);
@@ -25,15 +27,14 @@ export function moduleView(main, id) {
   setCoachContext({ title: `Modul: ${m.title}`, text: m.lessons.map(lessonPlainText).join('\n\n'), link: `#/modul/${m.id}` });
 
   const first = m.lessons.find((l) => !p?.lessons[l.id]) || m.lessons[0];
-  const idx = modIndex(m);
 
   main.append(
-    crumbs({ href: '#/', label: 'Übersicht' }, { label: m.custom ? 'Eigene Lektion' : `Modul ${idx + 1}` }),
+    crumbs({ href: '#/', label: 'Übersicht' }, { label: moduleLabel(m) }),
     h('div.card',
       h('div.row', { style: { alignItems: 'flex-start', gap: '16px' } },
         h('div.mc-icon', { style: { width: '64px', height: '64px', display: 'grid', placeItems: 'center', borderRadius: '14px', background: m.isNew ? 'var(--accent-soft)' : 'var(--primary-soft)', color: m.isNew ? 'var(--accent)' : 'var(--primary)' } }, pixelIcon(m.icon, 40)),
         h('div', { style: { flex: 1, minWidth: '240px' } },
-          h('div.row', m.isNew && !m.custom ? h('span.chip.chip-new', '★ Neu – Erweiterung zum Handout') : null, m.custom ? h('span.chip.chip-warn', 'Eigene Lektion') : null, h('span.chip', `⏱ ca. ${m.minutes} Min.`), h('span.chip', `${m.lessons.length} Lektionen`), pr.complete ? h('span.chip.chip-ok', '✅ Abgeschlossen') : null),
+          h('div.row', m.chapter ? h('span.chip.chip-primary', `📘 Kapitel ${m.chapter} des Theorieskripts`) : null, m.plus ? h('span.chip.chip-new', '★ Plus-Modul – über das Skript hinaus') : null, m.custom ? h('span.chip.chip-warn', 'Eigene Lektion') : null, h('span.chip', `⏱ ca. ${m.minutes} Min.`), h('span.chip', `${m.lessons.length} Lektionen`), pr.complete ? h('span.chip.chip-ok', '✅ Abgeschlossen') : null),
           h('h1', { style: { marginTop: '8px' } }, m.title),
           h('p.muted', m.subtitle),
           h('div.progress', h('i', { style: { width: pr.pct + '%' } })),
@@ -41,12 +42,13 @@ export function moduleView(main, id) {
           h('div.row', h('a.btn.btn-primary', { href: `#/modul/${m.id}/lektion/${first.id}` }, pr.done ? '▶ Weiterlernen' : '▶ Starten'), h('a.btn', { href: `#/modul/${m.id}/quiz` }, '🎯 Modul-Quiz'))))),
   );
 
-  if (m.handout?.length) {
-    main.append(h('div.block-handout', { style: { marginTop: '16px' } },
-      h('div.ho-head', '📄 Bezug zum Original-Handout „KI-Management kompakt“'),
-      h('div.row', m.handout.map((x) => h('span.chip.chip-primary', `Kap. ${x.section} ${x.title} · `, handoutLink(x.page, `S. ${x.page}`))))));
-  } else if (m.isNew && !m.custom) {
-    main.append(h('div.block-update', { style: { marginTop: '16px' } }, h('h4', '★ Ergänzungsmodul'), h('p', { style: { margin: 0 } }, 'Dieses Thema kommt im Handout nicht (ausreichend) vor, ist aber für KI-Management in der Praxis heute zentral. Alle Aussagen sind mit Quellen belegt.')));
+  if (m.skript?.length) {
+    main.append(h('div.block-skript', { style: { marginTop: '16px' } },
+      h('div.ho-head', `📘 Bezug zum Theorieskript „KI-Management“ (${COURSE.skript.publisher} ${COURSE.skript.code})`, skriptLink()),
+      h('div.row', m.skript.map((x) => h('span.chip.chip-primary', `${x.chapter} ${x.title || ''} · S. ${x.page}`)))));
+  }
+  if (m.plus) {
+    main.append(h('div.block-update', { style: { marginTop: '16px' } }, h('h4', '★ Plus-Modul'), h('p', { style: { margin: 0 } }, 'Dieses Thema geht über das Theorieskript hinaus oder vertieft es praktisch – für KI-Management heute zentral. Alle Aussagen sind mit Quellen belegt.')));
   }
 
   const tabs = [
@@ -71,7 +73,7 @@ export function moduleView(main, id) {
 function lessonsTab(m, p) {
   return h('div.stack', m.lessons.map((l, i) => h('a.card.card-flat', { href: `#/modul/${m.id}/lektion/${l.id}`, style: { textDecoration: 'none', color: 'inherit', display: 'flex', gap: '14px', alignItems: 'center' } },
     h('span.pixel', { style: { fontSize: '.7rem', color: p?.lessons[l.id] ? 'var(--success)' : 'var(--muted)', width: '28px' } }, p?.lessons[l.id] ? '✓' : String(i + 1).padStart(2, '0')),
-    h('div', { style: { flex: 1 } }, h('strong', l.title), h('div.small.muted', `⏱ ${l.minutes || 10} Min. · ${l.blocks.length} Abschnitte${l.blocks.some((b) => b.type === 'interactive') ? ' · 🕹️ interaktiv' : ''}${l.blocks.some((b) => b.type === 'video' || b.type === 'youtube') ? ' · 🎬 Video' : ''}`)),
+    h('div', { style: { flex: 1 } }, h('strong', l.title), h('div.small.muted', `${l.skript ? `📘 Skript S. ${l.skript.page} · ` : ''}${l.deepening ? 'Vertiefung · ' : ''}⏱ ${l.minutes || 10} Min. · ${l.blocks.length} Abschnitte${l.blocks.some((b) => b.type === 'interactive') ? ' · 🕹️ interaktiv' : ''}${l.blocks.some((b) => b.type === 'video' || b.type === 'youtube') ? ' · 🎬 Video' : ''}`)),
     h('span', '→'))).concat([
     h('a.card.card-flat', { href: `#/modul/${m.id}/quiz`, style: { textDecoration: 'none', color: 'inherit', display: 'flex', gap: '14px', alignItems: 'center', borderColor: 'var(--accent)' } },
       h('span', { style: { width: '28px' } }, '🎯'), h('div', { style: { flex: 1 } }, h('strong', 'Modul-Quiz'), h('div.small.muted', `${m.quiz.length} Fragen · ab 70 % bestanden · bestes Ergebnis: ${p?.quiz[m.id] ? `${p.quiz[m.id].best}/${p.quiz[m.id].total}` : '–'}`)), h('span', '→')),
@@ -121,7 +123,7 @@ export function lessonView(main, id, lid) {
 
   const article = h('article',
     crumbs({ href: '#/', label: 'Übersicht' }, { href: `#/modul/${m.id}`, label: m.title }, { label: `Lektion ${li + 1}` }),
-    h('div.row', h('span.chip', `Lektion ${li + 1} von ${m.lessons.length}`), h('span.chip', `⏱ ${l.minutes || 10} Min.`), p?.lessons[l.id] ? h('span.chip.chip-ok', '✅ erledigt') : null),
+    h('div.row', h('span.chip', `${moduleLabel(m)} · Lektion ${li + 1} von ${m.lessons.length}`), l.skript ? skriptChip(l.skript.chapter, l.skript.page) : null, l.deepening ? h('span.chip.chip-new', 'Vertiefung') : null, h('span.chip', `⏱ ${l.minutes || 10} Min.`), p?.lessons[l.id] ? h('span.chip.chip-ok', '✅ erledigt') : null),
     h('h1', { style: { marginTop: '10px' } }, l.title),
     l.blocks.map((b) => renderBlock(b, { lessonId: l.id, moduleId: m.id })));
 
