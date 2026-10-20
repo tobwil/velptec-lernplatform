@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KI-Management Lernplattform · velpTEC</title>
+  <meta name="description" content="Interaktive Lernplattform zur Weiterbildung KI-Management: Lektionen mit Praxisbezug, Quiz, Animationen, Pixel-Erklärfilm, Rangliste, Übungen mit optionalem KI-Feedback.">
+  <meta name="theme-color" content="#f4f3ee">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%230b0f1d'/%3E%3Cpath fill='%235b7cff' d='M1 1h14v1H1zM1 11h14v1H1zM1 2h1v9H1zM14 2h1v9h-1zM5 12h2v1H5zM9 12h2v1H9zM4 13h8v1H4z'/%3E%3Cpath fill='%23ffb257' d='M3 3h2v1H3zM11 3h2v1h-2zM4 4h2v1H4zM10 4h2v1h-2zM5 5h2v1H5zM9 5h2v1H9zM6 6h4v1H6zM7 7h2v1H7z'/%3E%3Cpath fill='%234fd1a1' d='M4 9h8v1H4z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/widgets.css">
+  <script>
+    // Theme vor dem ersten Rendern setzen (verhindert Aufblitzen)
+    try {
+      var s = JSON.parse(localStorage.getItem('vlp:settings:v1') || '{}');
+      if (s.theme === 'light' || s.theme === 'dark') document.documentElement.dataset.theme = s.theme;
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">Zum Inhalt springen</a>
+  <div id="app" class="app">
+    <noscript><p style="padding:20px">Bitte aktiviere JavaScript, um die Lernplattform zu nutzen.</p></noscript>
+  </div>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

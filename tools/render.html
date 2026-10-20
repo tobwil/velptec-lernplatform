@@ -1,0 +1,13 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Render</title>
+<canvas id="c" width="320" height="180"></canvas>
+<script type="module">
+  import { Pix } from '../assets/js/video/engine.js';
+  import { renderFilm, TOTAL } from '../assets/js/video/scenes.js';
+  const c = document.getElementById('c');
+  const p = new Pix(c.getContext('2d'));
+  window.TOTAL = TOTAL;
+  window.frame = (t) => { renderFilm(p, t); return c.toDataURL('image/png'); };
+  window.ready = true;
+</script>

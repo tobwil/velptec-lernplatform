@@ -1,0 +1,73 @@
+{
+  "name": "velpTEC Lernplattform – Online-Rangliste",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "velptec-rangliste",
+        "responseMode": "responseNode",
+        "options": { "allowedOrigins": "*" }
+      },
+      "id": "a1c0f6a8-0001-4c55-9d2e-000000000001",
+      "name": "Score-Karte empfangen (POST)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "velptec-rangliste-post"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "velptec-rangliste",
+        "responseMode": "responseNode",
+        "options": { "allowedOrigins": "*" }
+      },
+      "id": "a1c0f6a8-0002-4c55-9d2e-000000000002",
+      "name": "Rangliste abrufen (GET)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 220],
+      "webhookId": "velptec-rangliste-get"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Speichert Score-Karten in den statischen Workflow-Daten (nur im aktiven Produktivbetrieb persistent).\nconst data = $getWorkflowStaticData('global');\ndata.cards = data.cards || {};\nconst card = $input.first().json.body || {};\nconst valid = typeof card.id === 'string' && typeof card.name === 'string' && card.name.length <= 40 && Number.isFinite(card.xp) && Number.isFinite(card.updated);\nif (valid) {\n  const prev = data.cards[card.id];\n  if (!prev || prev.updated < card.updated) data.cards[card.id] = card;\n}\nreturn [{ json: { cards: Object.values(data.cards) } }];"
+      },
+      "id": "a1c0f6a8-0003-4c55-9d2e-000000000003",
+      "name": "Karte speichern",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $getWorkflowStaticData('global');\nreturn [{ json: { cards: Object.values(data.cards || {}) } }];"
+      },
+      "id": "a1c0f6a8-0004-4c55-9d2e-000000000004",
+      "name": "Karten lesen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 220]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json.cards) }}",
+        "options": {}
+      },
+      "id": "a1c0f6a8-0005-4c55-9d2e-000000000005",
+      "name": "Antwort senden",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [480, 110]
+    }
+  ],
+  "connections": {
+    "Score-Karte empfangen (POST)": { "main": [[{ "node": "Karte speichern", "type": "main", "index": 0 }]] },
+    "Rangliste abrufen (GET)": { "main": [[{ "node": "Karten lesen", "type": "main", "index": 0 }]] },
+    "Karte speichern": { "main": [[{ "node": "Antwort senden", "type": "main", "index": 0 }]] },
+    "Karten lesen": { "main": [[{ "node": "Antwort senden", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}

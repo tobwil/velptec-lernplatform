@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Widget-Testseite</title>
+  <link rel="stylesheet" href="../assets/css/app.css">
+  <link rel="stylesheet" href="../assets/css/widgets.css">
+  <style>
+    .test-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    .test-bar h1 { font-size: 1rem; margin: 0 8px 0 0; }
+    .test-wrap { max-width: 1080px; margin: 0 auto; padding: 18px 16px 60px; display: grid; gap: 28px; }
+    .test-sec > h2 { font-size: .8rem; font-family: var(--mono); color: var(--muted); margin: 0 0 6px; }
+    .test-log { font-family: var(--mono); font-size: .75rem; color: var(--muted); max-height: 120px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <div class="test-bar">
+    <h1>Widget-Testseite</h1>
+    <button class="btn btn-sm" id="theme" type="button">Theme: System</button>
+    <label class="switch small"><input type="checkbox" id="ai"> KI simulieren</label>
+    <button class="btn btn-sm" id="remount" type="button">Alle neu mounten</button>
+    <span class="spacer"></span>
+    <span class="small muted" id="xp">XP: 0</span>
+  </div>
+  <main class="test-wrap" id="host"></main>
+  <div class="test-wrap"><div class="test-log" id="log" aria-label="Ereignisprotokoll"></div></div>
+
+  <script type="module">
+    import { widgets } from '../assets/js/widgets/index.js';
+    import { toast } from '../assets/js/ui.js';
+
+    const params = new URLSearchParams(location.search);
+    const only = params.get('only');
+    const host = document.getElementById('host');
+    const logEl = document.getElementById('log');
+    const aiBox = document.getElementById('ai');
+    if (params.get('ai') === '1') aiBox.checked = true;
+    const state = { xp: 0, events: [], cleanups: [], mounted: 0 };
+    window.__widgetTest = state;
+
+    const log = (type, msg) => {
+      state.events.push({ type, msg });
+      logEl.prepend(Object.assign(document.createElement('div'), { textContent: `[${type}] ${msg}` }));
+    };
+
+    const ctx = {
+      confetti: (opts) => { log('confetti', JSON.stringify(opts || {})); toast('Konfetti!', { icon: '🎉' }); },
+      award: (xp, reason) => { state.xp += xp; document.getElementById('xp').textContent = `XP: ${state.xp}`; log('award', `${xp} – ${reason}`); },
+      toast: (msg, opts) => { log('toast', msg); toast(msg, opts); },
+      ai: {
+        enabled: () => aiBox.checked,
+        chat: async (messages, { system } = {}) => {
+          log('ai', `${messages.length} Nachricht(en), system: ${(system || '').slice(0, 40)}`);
+          await new Promise((r) => setTimeout(r, 300));
+          return '**Simulierte KI-Antwort.** Das ist ein Platzhalter der Testseite – in der Plattform antwortet hier das angebundene Modell.';
+        },
+      },
+    };
+
+    // Theme-Umschalter: System → Hell → Dunkel
+    const themes = [null, 'light', 'dark'];
+    let ti = themes.indexOf(params.get('theme'));
+    if (ti < 0) ti = 0;
+    const applyTheme = () => {
+      const t = themes[ti];
+      if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+      document.getElementById('theme').textContent = `Theme: ${t === 'light' ? 'Hell' : t === 'dark' ? 'Dunkel' : 'System'}`;
+    };
+    document.getElementById('theme').addEventListener('click', () => { ti = (ti + 1) % themes.length; applyTheme(); });
+    applyTheme();
+
+    async function mountAll() {
+      state.cleanups.forEach((fn) => { try { fn(); } catch (e) { console.error(e); } });
+      state.cleanups = [];
+      host.replaceChildren();
+      const names = Object.keys(widgets).filter((n) => !only || n === only);
+      for (const name of names) {
+        const sec = document.createElement('section');
+        sec.className = 'test-sec';
+        sec.id = `sec-${name}`;
+        const h2 = document.createElement('h2');
+        h2.textContent = name;
+        const el = document.createElement('div');
+        el.dataset.widget = name;
+        sec.append(h2, el);
+        host.append(sec);
+        try {
+          const mod = await widgets[name]();
+          const cleanup = mod.default(el, {}, ctx);
+          state.cleanups.push(typeof cleanup === 'function' ? cleanup : () => {});
+          state.mounted++;
+        } catch (e) {
+          console.error(`Widget ${name} konnte nicht gemountet werden:`, e);
+          el.textContent = `Fehler: ${e.message}`;
+        }
+      }
+      document.body.dataset.ready = '1';
+    }
+    document.getElementById('remount').addEventListener('click', () => { document.body.dataset.ready = ''; mountAll(); });
+    aiBox.addEventListener('change', () => { document.body.dataset.ready = ''; mountAll(); });
+    mountAll();
+  </script>
+</body>
+</html>

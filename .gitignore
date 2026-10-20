@@ -1,0 +1,4 @@
+node_modules/
+media/soundtrack.wav
+media/frame-*.png
+.DS_Store
